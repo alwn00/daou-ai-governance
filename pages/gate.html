@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAOU AI Governance — 도입 심사 (AI Gate)</title>
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../styles/base.css">
+<link rel="stylesheet" href="../styles/layout.css">
+<link rel="stylesheet" href="../styles/components.css">
+<link rel="stylesheet" href="../styles/pages/gate.css">
+</head>
+<body data-page="gate">
+<div class="app">
+
+  <div id="nav-mount"></div>
+
+  <main class="main">
+
+    <div class="topbar">
+      <div>
+        <h1>도입 심사 (AI Gate)</h1>
+        <div class="sub">신규 AI 도입·기능 추가는 4단계 심사를 거쳐 승인됩니다 · 카드를 끌어 단계를 이동할 수 있습니다</div>
+      </div>
+      <div class="top-right">
+        <button class="btn-primary" id="btnNewGate">＋ 신규 심사 신청</button>
+        <div class="user">
+          <div class="avatar" aria-hidden="true">김</div>
+          <div class="info"><b>김미주</b><span>AX 운영기획 · CAIO Office</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 파이프라인 칸반 -->
+    <section class="kanban" id="kanban" aria-label="심사 파이프라인">
+      <div class="kan-col" data-stage="1">
+        <div class="kan-head"><b>① 접수</b><span class="kan-count">0</span></div>
+        <div class="kan-cards"></div>
+      </div>
+      <div class="kan-col" data-stage="2">
+        <div class="kan-head"><b>② 위험 평가</b><span class="kan-count">0</span></div>
+        <div class="kan-cards"></div>
+      </div>
+      <div class="kan-col" data-stage="3">
+        <div class="kan-head"><b>③ 보안·법무 검토</b><span class="kan-count">0</span></div>
+        <div class="kan-cards"></div>
+      </div>
+      <div class="kan-col" data-stage="4">
+        <div class="kan-head"><b>④ 위원회 승인</b><span class="kan-count">0</span></div>
+        <div class="kan-cards"></div>
+      </div>
+    </section>
+
+    <!-- 신청 목록 -->
+    <section class="card">
+      <div class="card-head">
+        <h2>심사 신청 목록</h2>
+        <span class="hint">SLA 10일 이내 처리 · 평균 6.2일</span>
+      </div>
+      <div class="table-wrap">
+        <table role="table">
+          <thead>
+            <tr><th>신청 ID</th><th>AI명</th><th>신청 부서</th><th>접수일</th><th>위험 등급(잠정)</th><th>현재 단계</th><th>경과일</th></tr>
+          </thead>
+          <tbody id="gateTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="proto-note">
+      심사 단계: <b>접수 → 위험 평가 → 보안·법무 검토 → 위원회 승인</b> · 신규 AI 기능 출시 전 사전 검토 의무화
+    </div>
+  </main>
+</div>
+
+<!-- 신청 상세 모달 -->
+<div class="modal-bg" id="gateDetailBg" role="dialog" aria-modal="true" aria-labelledby="gdTitle">
+  <div class="modal modal--wide">
+    <h3 id="gdTitle"></h3>
+    <p class="m-sub" id="gdSub"></p>
+    <div id="gdStage"></div>
+    <div id="gdBody"></div>
+    <div class="f-row">
+      <label for="gdComment">승인권자 코멘트</label>
+      <textarea id="gdComment" rows="2" placeholder="검토 의견을 입력하세요. 다음 단계 이동 시 이력에 기록됩니다."></textarea>
+    </div>
+    <div class="m-actions">
+      <button type="button" class="btn-ghost" id="gdClose">닫기</button>
+      <button type="button" class="btn-primary" id="gdSaveComment">코멘트 저장</button>
+    </div>
+  </div>
+</div>
+
+<script src="../scripts/icons.js"></script>
+<script src="../scripts/nav.js"></script>
+<script src="../scripts/components.js"></script>
+<script src="../scripts/charts.js"></script>
+<script src="../scripts/pages/gate.js"></script>
+</body>
+</html>

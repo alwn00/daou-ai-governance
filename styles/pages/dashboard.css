@@ -1,0 +1,4 @@
+/* dashboard.css — 메인 대시보드 전용 스타일 */
+
+/* 위험 등급 분포 도넛 — SVG 차트가 .donut-svg 컨테이너에 렌더링됩니다 */
+.dash-donut{display:flex; align-items:center; justify-content:center;}

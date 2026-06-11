@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAOU AI Governance — 감사 리포트</title>
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../styles/base.css">
+<link rel="stylesheet" href="../styles/layout.css">
+<link rel="stylesheet" href="../styles/components.css">
+<link rel="stylesheet" href="../styles/pages/audit.css">
+</head>
+<body data-page="audit">
+<div class="app">
+
+  <div id="nav-mount"></div>
+
+  <main class="main">
+
+    <div class="topbar">
+      <div>
+        <h1>감사 리포트</h1>
+        <div class="sub">규제 대응 근거 문서를 자동 생성합니다 · 인벤토리·리스크·교육 데이터 기반</div>
+      </div>
+      <div class="top-right">
+        <div class="user">
+          <div class="avatar" aria-hidden="true">김</div>
+          <div class="info"><b>김미주</b><span>AX 운영기획 · CAIO Office</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 컴플라이언스 점수 -->
+    <section class="score-grid">
+      <div class="score-card">
+        <span class="sc-label">한국 AI 기본법</span>
+        <div class="gauge-box" id="gaugeKr"></div>
+        <span class="sc-note">고영향 AI 확인 절차 착수 시 +18점 예상</span>
+      </div>
+      <div class="score-card">
+        <span class="sc-label">EU AI Act</span>
+        <div class="gauge-box" id="gaugeEu"></div>
+        <span class="sc-note">워터마킹(12.02 기한)·기술 문서가 주요 미비 항목</span>
+      </div>
+      <div class="score-card">
+        <span class="sc-label">내부 감사</span>
+        <div class="gauge-box" id="gaugeInt"></div>
+        <span class="sc-note">데이터 보안 원칙 운영 양호 · 검증 체계 보완 중</span>
+      </div>
+    </section>
+
+    <!-- 리포트 생성 -->
+    <section class="card" style="margin-bottom:16px">
+      <div class="card-head">
+        <h2><span data-icon="report" data-size="16"></span>리포트 생성</h2>
+        <span class="hint">생성된 리포트는 거버넌스 위원회 보고 및 대외 제출용으로 사용됩니다</span>
+      </div>
+      <div class="report-form">
+        <div class="f-row mb-0">
+          <label for="rptType">리포트 유형 <em>*</em></label>
+          <select id="rptType">
+            <option>한국 AI 기본법 준수 보고서</option>
+            <option>EU AI Act 컴플라이언스 리포트</option>
+            <option>내부 감사 보고서</option>
+            <option>분기 AI 현황 보고서</option>
+          </select>
+        </div>
+        <div class="f-row mb-0">
+          <label for="rptFrom">시작일</label>
+          <input type="date" id="rptFrom" value="2026-04-01">
+        </div>
+        <div class="f-row mb-0">
+          <label for="rptTo">종료일</label>
+          <input type="date" id="rptTo" value="2026-06-10">
+        </div>
+        <button class="btn-primary" id="btnGenerate">리포트 생성</button>
+      </div>
+
+      <!-- 인라인 미리보기 -->
+      <div class="report-preview" id="rptPreview" aria-live="polite"></div>
+    </section>
+
+    <!-- 이전 리포트 -->
+    <section class="card">
+      <div class="card-head">
+        <h2>이전 리포트</h2>
+        <span class="hint">최근 5건</span>
+      </div>
+      <div class="table-wrap">
+        <table role="table">
+          <thead>
+            <tr><th>생성일</th><th>리포트 유형</th><th>대상 기간</th><th>생성자</th><th>다운로드</th></tr>
+          </thead>
+          <tbody id="rptHistory"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="proto-note">
+      컴플라이언스 점수는 인벤토리 등록률 · 리스크 조치율 · 교육 이수율 · 정책 운영 현황을 가중 합산해 산출됩니다
+    </div>
+  </main>
+</div>
+
+<script src="../scripts/icons.js"></script>
+<script src="../scripts/nav.js"></script>
+<script src="../scripts/components.js"></script>
+<script src="../scripts/charts.js"></script>
+<script src="../scripts/pages/audit.js"></script>
+</body>
+</html>

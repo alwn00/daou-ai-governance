@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAOU AI Governance — 메인 대시보드</title>
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../styles/base.css">
+<link rel="stylesheet" href="../styles/layout.css">
+<link rel="stylesheet" href="../styles/components.css">
+<link rel="stylesheet" href="../styles/pages/dashboard.css">
+</head>
+<body data-page="dashboard">
+<div class="app">
+
+  <div id="nav-mount"></div>
+
+  <main class="main">
+
+    <div class="topbar">
+      <div>
+        <h1>메인 대시보드</h1>
+        <div class="sub">2026.06.10 (수) 기준 · 전사 AI 거버넌스 현황을 한 화면에서 확인합니다</div>
+      </div>
+      <div class="top-right">
+        <button class="btn-primary" data-action="open-gate-modal">＋ AI 도입 심사 신청</button>
+        <div class="user">
+          <div class="avatar" aria-hidden="true">김</div>
+          <div class="info"><b>김미주</b><span>AX 운영기획 · CAIO Office</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KPI -->
+    <section class="kpis">
+      <a class="kpi" href="inventory.html" aria-label="등록 AI 시스템 7개 — AI 인벤토리로 이동">
+        <div class="k-top">
+          <span class="k-title">등록 AI 시스템</span>
+          <span class="k-ico" style="background:var(--blue-soft);color:var(--blue)" data-icon="inventory"></span>
+        </div>
+        <div class="k-val">7<small>개</small></div>
+        <div class="k-foot">제품 탑재 5 · 임직원 도구 2 <b class="up">· 인벤토리 100% 등록</b></div>
+      </a>
+      <a class="kpi kpi--alert" href="risk.html" aria-label="미조치 리스크 5건 — 리스크 관리로 이동">
+        <div class="k-top">
+          <span class="k-title">미조치 리스크</span>
+          <span class="k-ico" style="background:var(--high-bg);color:var(--high)" data-icon="risk"></span>
+        </div>
+        <div class="k-val">5<small>건</small></div>
+        <div class="k-foot"><b class="down">긴급 2건</b> · 이번 주 신규 1건</div>
+      </a>
+      <a class="kpi" href="gate.html" aria-label="AI Gate 심사 대기 3건 — 도입 심사로 이동">
+        <div class="k-top">
+          <span class="k-title">AI Gate 심사 대기</span>
+          <span class="k-ico" style="background:var(--mid-bg);color:var(--mid)" data-icon="gate"></span>
+        </div>
+        <div class="k-val">3<small>건</small></div>
+        <div class="k-foot">평균 처리 기간 <b>6.2일</b> · SLA 10일 이내</div>
+      </a>
+      <a class="kpi" href="education.html" aria-label="AI 리터러시 교육 이수율 78% — 교육 관리로 이동">
+        <div class="k-top">
+          <span class="k-title">AI 리터러시 교육 이수율</span>
+          <span class="k-ico" style="background:var(--low-bg);color:var(--low)" data-icon="education"></span>
+        </div>
+        <div class="k-val">78<small>%</small></div>
+        <div class="k-foot">한국 AI 기본법 의무 교육 · <b class="warn-t">미이수 142명</b></div>
+      </a>
+    </section>
+
+    <!-- 알림 + 컴플라이언스 -->
+    <section class="grid g-2-1">
+
+      <div class="card">
+        <div class="card-head">
+          <h2><span data-icon="bell" data-size="16"></span>즉시 조치 필요</h2>
+          <a class="more" href="risk.html">리스크 관리로 이동 →</a>
+        </div>
+        <a class="alert-item high" href="risk.html" style="display:flex">
+          <span class="dot"></span>
+          <div class="a-body">
+            <div class="a-title">다우오피스 HR AI — 고영향 AI 해당 여부 확인 미착수</div>
+            <div class="a-desc">채용·인사 영역으로 한국 AI 기본법 고영향 AI 해당 가능성 높음. 과기정통부 확인 요청 절차 즉시 착수 필요.</div>
+          </div>
+          <div class="a-meta">
+            <span class="dday red">긴급</span>
+            <span class="a-owner">담당: XI Lab · 법무팀</span>
+          </div>
+        </a>
+        <a class="alert-item high" href="risk.html" style="display:flex">
+          <span class="dot"></span>
+          <div class="a-body">
+            <div class="a-title">뿌리오 AI — 생성 문자 워터마킹(AI 표시) 미적용</div>
+            <div class="a-desc">EU AI Act 워터마킹 의무 기한 2026.12.02 확정. 한국 AI 기본법도 사람 인식 + 기계 판독(C2PA) 이원화 표시 요구.</div>
+          </div>
+          <div class="a-meta">
+            <span class="dday red">D-175</span>
+            <span class="a-owner">담당: 서비스개발팀</span>
+          </div>
+        </a>
+        <a class="alert-item mid" href="risk.html" style="display:flex">
+          <span class="dot"></span>
+          <div class="a-body">
+            <div class="a-title">고객 데이터 학습 미사용 원칙 — 검증 체계 부재</div>
+            <div class="a-desc">고객사 9,000곳 대상 공식 선언만 존재. 감사 로그·정기 검증 프로세스를 내부 감사 항목으로 편입 필요.</div>
+          </div>
+          <div class="a-meta">
+            <span class="dday amber">30일 내</span>
+            <span class="a-owner">담당: 보안팀</span>
+          </div>
+        </a>
+        <a class="alert-item mid" href="education.html" style="display:flex">
+          <span class="dot"></span>
+          <div class="a-body">
+            <div class="a-title">경영지원 부서 — 교육 이수율 64% (전사 최저)</div>
+            <div class="a-desc">한국 AI 기본법 의무 교육 미이수자 47명. 2분기 마감(06.30) 전 이수 독려 알림 발송 필요.</div>
+          </div>
+          <div class="a-meta">
+            <span class="dday amber">D-20</span>
+            <span class="a-owner">담당: 교육 운영</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2><span data-icon="scale" data-size="16"></span>규제 컴플라이언스</h2>
+          <span class="hint">2026.06 기준</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:11px;">
+          <a class="comp-card" href="audit.html" style="display:block">
+            <div class="comp-top"><b><span data-icon="scale" data-size="15" style="color:var(--brand);vertical-align:-3px;margin-right:5px"></span>한국 AI 기본법</b><span class="comp-status warn">일부 대응</span></div>
+            <ul>
+              <li class="done">학습 데이터 미사용 원칙 공시</li>
+              <li class="no">고영향 AI 확인 절차 미착수</li>
+              <li class="part">AI 표시 이원화 — 기준 수립 중</li>
+            </ul>
+          </a>
+          <a class="comp-card" href="audit.html" style="display:block">
+            <div class="comp-top"><b><span data-icon="globe" data-size="15" style="color:var(--brand);vertical-align:-3px;margin-right:5px"></span>EU AI Act</b><span class="comp-status bad">미대응</span></div>
+            <ul>
+              <li class="no">워터마킹 — 기한 2026.12.02</li>
+              <li class="no">역외 적용 대응 체계 없음</li>
+              <li class="part">고위험 AI 적합성 평가 검토 중</li>
+            </ul>
+          </a>
+          <a class="comp-card" href="audit.html" style="display:block">
+            <div class="comp-top"><b><span data-icon="lock" data-size="15" style="color:var(--brand);vertical-align:-3px;margin-right:5px"></span>데이터 보안 원칙</b><span class="comp-status ok">운영 중</span></div>
+            <ul>
+              <li class="done">고객 데이터 AI 학습 미사용</li>
+              <li class="done">개인정보 처리방침 AI 항목 신설</li>
+              <li class="part">정기 감사 체계 구축 중</li>
+            </ul>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 인벤토리 + 분포 -->
+    <section class="grid g-2-1">
+      <div class="card">
+        <div class="card-head">
+          <h2><span data-icon="inventory" data-size="16"></span>AI 인벤토리</h2>
+          <a class="more" href="inventory.html">전체 보기 →</a>
+        </div>
+        <div class="table-wrap">
+        <table role="table">
+          <thead>
+            <tr><th>AI 시스템</th><th>처리 데이터</th><th>위험 등급</th><th>상태</th><th>최근 점검</th></tr>
+          </thead>
+          <tbody data-href="inventory.html">
+            <tr class="clickable">
+              <td><span class="ai-name">다우오피스 HR AI <span class="chip prod">제품</span></span></td>
+              <td class="td-sub">인사·근태·채용 데이터</td>
+              <td><span class="risk high">고위험</span></td>
+              <td><span class="status act"><span class="s-dot"></span>조치 필요</span></td>
+              <td class="td-sub">2026.06.08</td>
+            </tr>
+            <tr class="clickable">
+              <td><span class="ai-name">뿌리오 AI <span class="chip prod">제품</span></span></td>
+              <td class="td-sub">마케팅 문구·발송 데이터</td>
+              <td><span class="risk mid">중위험</span></td>
+              <td><span class="status act"><span class="s-dot"></span>조치 필요</span></td>
+              <td class="td-sub">2026.06.05</td>
+            </tr>
+            <tr class="clickable">
+              <td><span class="ai-name">알리GPT <span class="chip prod">제품</span></span></td>
+              <td class="td-sub">고객 문의·FAQ 2,500건</td>
+              <td><span class="risk mid">중위험</span></td>
+              <td><span class="status ok"><span class="s-dot"></span>운영 중</span></td>
+              <td class="td-sub">2026.06.02</td>
+            </tr>
+            <tr class="clickable">
+              <td><span class="ai-name">Gemini <span class="chip emp">임직원</span></span></td>
+              <td class="td-sub">업무 문서 전반 (전직원)</td>
+              <td><span class="risk mid">중위험</span></td>
+              <td><span class="status rev"><span class="s-dot"></span>정책 검토</span></td>
+              <td class="td-sub">2026.05.28</td>
+            </tr>
+            <tr class="clickable">
+              <td><span class="ai-name">다우오피스 AI <span class="chip prod">제품</span></span></td>
+              <td class="td-sub">메일·게시판·사내 문서</td>
+              <td><span class="risk low">저위험</span></td>
+              <td><span class="status ok"><span class="s-dot"></span>운영 중</span></td>
+              <td class="td-sub">2026.06.01</td>
+            </tr>
+            <tr class="clickable">
+              <td><span class="ai-name">사방넷 AI <span class="chip prod">제품</span></span></td>
+              <td class="td-sub">상품·CS 데이터</td>
+              <td><span class="risk low">저위험</span></td>
+              <td><span class="status ok"><span class="s-dot"></span>운영 중</span></td>
+              <td class="td-sub">2026.05.30</td>
+            </tr>
+            <tr class="clickable">
+              <td><span class="ai-name">Claude Code <span class="chip emp">임직원</span></span></td>
+              <td class="td-sub">소스코드 (개발자)</td>
+              <td><span class="risk low">저위험</span></td>
+              <td><span class="status ok"><span class="s-dot"></span>운영 중</span></td>
+              <td class="td-sub">2026.05.26</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2><span data-icon="pie" data-size="16"></span>위험 등급 분포</h2>
+          <span class="hint">EU AI Act 기준 분류</span>
+        </div>
+        <div class="donut-wrap">
+          <div class="donut-svg dash-donut" id="riskDonut"></div>
+          <div class="legend">
+            <div class="l-row"><span class="l-dot" style="background:var(--high)"></span>고위험<span class="pct">14%</span><b>1</b></div>
+            <div class="l-row"><span class="l-dot" style="background:var(--mid)"></span>중위험<span class="pct">43%</span><b>3</b></div>
+            <div class="l-row"><span class="l-dot" style="background:var(--low)"></span>저위험<span class="pct">43%</span><b>3</b></div>
+          </div>
+        </div>
+        <div class="edu-note">
+          <b>고위험 1건</b> — 다우오피스 HR AI는 채용·인사 영역으로 한국 AI 기본법 <b>고영향 AI</b> 해당 가능성이 높아 별도 관리 대상입니다.
+        </div>
+      </div>
+    </section>
+
+    <!-- AI Gate + 교육 -->
+    <section class="grid g-1-1">
+      <div class="card">
+        <div class="card-head">
+          <h2><span data-icon="gate" data-size="16"></span>AI Gate — 도입 심사 현황</h2>
+          <button class="more" data-action="open-gate-modal">＋ 신규 신청</button>
+        </div>
+        <div id="gateList">
+          <div class="gate-item">
+            <div class="gate-ico">G</div>
+            <div class="gate-body">
+              <b>Google Workspace Enterprise 도입</b>
+              <span>경영지원본부 · 2026.06.03 신청 · 전직원 대상</span>
+              <div class="gate-steps"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+            </div>
+            <span class="stage s3">보안·법무 검토</span>
+          </div>
+          <div class="gate-item">
+            <div class="gate-ico">사</div>
+            <div class="gate-body">
+              <b>사방넷 — AI 상품 연동 고도화 기능</b>
+              <span>서비스개발팀 · 2026.06.05 신청 · 제품 신규 기능</span>
+              <div class="gate-steps"><i class="on"></i><i class="on"></i><i></i><i></i></div>
+            </div>
+            <span class="stage s2">위험 평가</span>
+          </div>
+          <div class="gate-item">
+            <div class="gate-ico">P</div>
+            <div class="gate-body">
+              <b>Perplexity 업무 활용 도입</b>
+              <span>마케팅팀 · 2026.06.09 신청 · 부서 단위</span>
+              <div class="gate-steps"><i class="on"></i><i></i><i></i><i></i></div>
+            </div>
+            <span class="stage s1">접수</span>
+          </div>
+        </div>
+        <div class="edu-note" style="margin-top:12px;">
+          심사 단계: <b>접수 → 위험 평가 → 보안·법무 검토 → 위원회 승인</b> · 신규 AI 기능 출시 전 사전 검토 의무화
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2><span data-icon="education" data-size="16"></span>AI 리터러시 교육 이수 현황</h2>
+          <span class="hint">2026 상반기 의무 교육 · 마감 06.30</span>
+        </div>
+        <div class="edu-row">
+          <div class="edu-top"><b>XI Lab</b><span style="color:var(--low)">95%</span></div>
+          <div class="bar"><i style="width:95%"></i></div>
+        </div>
+        <div class="edu-row">
+          <div class="edu-top"><b>서비스개발본부</b><span style="color:var(--blue)">82%</span></div>
+          <div class="bar"><i style="width:82%"></i></div>
+        </div>
+        <div class="edu-row">
+          <div class="edu-top"><b>비즈마케팅부문</b><span style="color:var(--blue)">76%</span></div>
+          <div class="bar"><i style="width:76%"></i></div>
+        </div>
+        <div class="edu-row">
+          <div class="edu-top"><b>영업본부</b><span style="color:var(--mid)">71%</span></div>
+          <div class="bar"><i class="warn" style="width:71%"></i></div>
+        </div>
+        <div class="edu-row">
+          <div class="edu-top"><b>경영지원본부</b><span style="color:var(--high)">64%</span></div>
+          <div class="bar"><i class="danger" style="width:64%"></i></div>
+        </div>
+        <div class="edu-note">
+          한국 AI 기본법상 AI 리터러시 교육은 <b>의무 사항</b>입니다. 이수 이력은 컴플라이언스 근거 자료로 자동 축적되며, 미이수자에게는 매주 월요일 알림이 발송됩니다.
+        </div>
+      </div>
+    </section>
+
+    <div class="proto-note">
+      본 화면은 다우기술 AI 거버넌스 관리 플랫폼의 <b>메인 대시보드</b>입니다. 데이터는 공개 자료 기반의 예시 값입니다.<br>
+      PT자료_AX운영기획_김미주 · 2026.06
+    </div>
+  </main>
+</div>
+
+<script src="../scripts/icons.js"></script>
+<script src="../scripts/nav.js"></script>
+<script src="../scripts/components.js"></script>
+<script src="../scripts/charts.js"></script>
+<script src="../scripts/pages/dashboard.js"></script>
+</body>
+</html>

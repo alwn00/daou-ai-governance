@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAOU AI Governance — 정책 관리</title>
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../styles/base.css">
+<link rel="stylesheet" href="../styles/layout.css">
+<link rel="stylesheet" href="../styles/components.css">
+</head>
+<body data-page="policy">
+<div class="app">
+
+  <div id="nav-mount"></div>
+
+  <main class="main">
+
+    <div class="topbar">
+      <div>
+        <h1>정책 관리</h1>
+        <div class="sub">임직원 AI 사용 원칙과 운영 기준을 관리합니다 · AI 거버넌스 위원회 의결 문서</div>
+      </div>
+      <div class="top-right">
+        <button class="btn-primary" id="btnPdf">⬇ 정책 다운로드 (PDF)</button>
+        <div class="user">
+          <div class="avatar" aria-hidden="true">김</div>
+          <div class="info"><b>김미주</b><span>AX 운영기획 · CAIO Office</span></div>
+        </div>
+      </div>
+    </div>
+
+    <section class="policy-layout">
+      <!-- 좌측 카테고리 네비 -->
+      <nav class="card policy-nav" aria-label="정책 카테고리">
+        <button class="on" data-policy="p1">임직원 AI 사용 원칙</button>
+        <button data-policy="p2">금지 데이터 유형</button>
+        <button data-policy="p3">제품 AI 운영 기준</button>
+        <button data-policy="p4">외부 AI API 사용 기준</button>
+        <button data-policy="p5">위반 시 처리 절차</button>
+      </nav>
+
+      <!-- 우측 정책 본문 -->
+      <div class="card">
+
+        <article id="p1" class="policy-content">
+          <div class="card-head"><h2>임직원 AI 사용 원칙</h2></div>
+          <div class="policy-meta"><span class="ver">v2.1</span>최종 개정 2026.05.15 · AI 거버넌스 위원회 의결</div>
+          <div class="policy-sec">
+            <h3>1. 기본 원칙</h3>
+            <ol>
+              <li>AI가 생성한 결과물은 <b>반드시 사람이 검토한 후</b> 사용한다. 검토 없이 외부에 전달하는 것을 금지한다.</li>
+              <li>업무 산출물에 AI를 사용한 경우, <b>AI 사용 사실을 문서화</b>한다.
+                <ul>
+                  <li>보고서·기획서: 문서 말미에 사용 도구와 활용 범위 기재</li>
+                  <li>소스코드: 커밋 메시지 또는 PR 설명에 기재</li>
+                </ul>
+              </li>
+              <li>고객사 관련 업무에 AI를 활용하는 경우, <b>고객사에 AI 사용 여부를 고지</b>한다.</li>
+              <li>회사가 승인한 AI 도구(인벤토리 등록 도구)만 업무에 사용한다. 미승인 도구는 AI Gate 심사를 먼저 신청한다.</li>
+            </ol>
+          </div>
+          <div class="callout info">
+            💡 한국 AI 기본법(2026.01.22 시행)은 생성형 AI 사용 사실의 <b>사전 고지</b>를 요구합니다. 위 원칙은 법적 의무 사항을 사내 기준으로 구체화한 것입니다.
+          </div>
+          <div class="policy-sec">
+            <h3>2. 책임</h3>
+            <ol>
+              <li>AI 산출물로 인해 발생하는 결과의 최종 책임은 <b>이를 사용한 임직원</b>에게 있다.</li>
+              <li>부서장은 소속 부서의 AI 사용 현황을 분기별로 점검한다.</li>
+            </ol>
+          </div>
+        </article>
+
+        <article id="p2" class="policy-content" hidden>
+          <div class="card-head"><h2>금지 데이터 유형</h2></div>
+          <div class="policy-meta"><span class="ver">v3.0</span>최종 개정 2026.04.02 · 보안팀 주관</div>
+          <div class="callout">
+            🚫 아래 데이터는 <b>어떠한 외부 AI 서비스에도 입력할 수 없습니다.</b> 입력 시도는 자동 감지되어 보안팀에 통보됩니다.
+          </div>
+          <div class="policy-sec">
+            <h3>1. 절대 금지 (전 채널)</h3>
+            <ol>
+              <li><b>고객사 영업비밀</b> — 고객사 계약 조건, 미공개 사업 정보, 고객사 내부 자료 일체</li>
+              <li><b>개인식별정보</b> — 주민등록번호, 여권번호, 운전면허번호, 외국인등록번호</li>
+              <li><b>임직원 인사평가 원본</b> — 평가 등급, 평가 의견, 보상 정보</li>
+              <li><b>미공개 재무정보</b> — 공시 전 실적, M&A 검토 자료, 내부 재무 계획</li>
+            </ol>
+          </div>
+          <div class="policy-sec">
+            <h3>2. 외부 AI 전송 금지 (사내 승인 환경만 허용)</h3>
+            <ol>
+              <li><b>소스코드</b> — 사내 승인된 개발 도구(Claude Code 등 인벤토리 등록 환경)에서만 처리 가능. 개인 계정의 외부 AI 서비스에 붙여넣기 금지</li>
+              <li><b>고객 데이터</b> — 비식별화 처리 후 보안팀 사전 승인 시에만 예외 허용</li>
+            </ol>
+          </div>
+        </article>
+
+        <article id="p3" class="policy-content" hidden>
+          <div class="card-head"><h2>제품 AI 운영 기준</h2></div>
+          <div class="policy-meta"><span class="ver">v1.4</span>최종 개정 2026.05.28 · XI Lab 주관</div>
+          <div class="policy-sec">
+            <h3>1. 출시 전 기준</h3>
+            <ol>
+              <li>제품에 탑재되는 모든 AI 기능은 출시 전 <b>AI Gate 심사</b>를 완료해야 한다.</li>
+              <li>채용·인사·평가 등 개인의 권익에 영향을 미치는 기능은 <b>고영향 AI 검토 절차</b>(법무팀 협의)를 추가로 거친다.</li>
+              <li>AI 기능에는 사용자 대상 <b>AI 사용 고지 문구</b>를 제품 UI에 표시한다.</li>
+            </ol>
+          </div>
+          <div class="policy-sec">
+            <h3>2. 운영 중 기준</h3>
+            <ol>
+              <li><b>고객 데이터는 AI 학습에 사용하지 않는다.</b> 이 원칙은 계약·공시 문서에 명시하며, 정기 감사로 검증한다.</li>
+              <li>AI 생성 콘텐츠에는 표시(워터마킹) 기준을 적용한다 — 사람 인식 가능 표시 + 기계 판독 가능 표시 이원화.</li>
+              <li>모델·프롬프트의 중대 변경은 <b>변경 보고</b> 후 적용한다 (서비스개발팀 → 거버넌스 위원회).</li>
+              <li>고위험 등급 AI는 월 1회 정기 점검을 수행하고 결과를 인벤토리에 기록한다.</li>
+            </ol>
+          </div>
+          <div class="callout info">
+            💡 EU AI Act 워터마킹 의무는 <b>2026.12.02</b> 발효됩니다. EU 기준 충족 시 한국 AI 기본법 표시 의무도 동시에 충족됩니다.
+          </div>
+        </article>
+
+        <article id="p4" class="policy-content" hidden>
+          <div class="card-head"><h2>외부 AI API 사용 기준</h2></div>
+          <div class="policy-meta"><span class="ver">v1.2</span>최종 개정 2026.03.20 · 보안팀·법무팀 공동</div>
+          <div class="policy-sec">
+            <h3>1. 계약 요건</h3>
+            <ol>
+              <li>외부 AI API 계약에는 <b>입력 데이터의 학습 미사용(zero retention) 조항</b>을 포함해야 한다.</li>
+              <li>데이터 처리 위치(리전)와 보관 기간을 계약서에 명시한다.</li>
+              <li>계약 체결·갱신 시 법무팀의 데이터 처리 조항 검토를 거친다.</li>
+            </ol>
+          </div>
+          <div class="policy-sec">
+            <h3>2. 운영 요건</h3>
+            <ol>
+              <li>API 키는 보안팀이 발급·관리하며, 개인 계정 API 키의 업무 사용을 금지한다.</li>
+              <li>API 호출 로그를 90일 이상 보관하고 모니터링 시스템에 연동한다.</li>
+              <li>공급자의 모델 버전 변경 시 영향 평가 후 적용한다.</li>
+            </ol>
+          </div>
+          <div class="callout">
+            ⚠ 현재 알리GPT의 GPT-3.5 API 계약이 본 기준에 따라 <b>재검토 중</b>입니다 (RSK-004 · 기한 2026.07.10).
+          </div>
+        </article>
+
+        <article id="p5" class="policy-content" hidden>
+          <div class="card-head"><h2>위반 시 처리 절차</h2></div>
+          <div class="policy-meta"><span class="ver">v1.0</span>제정 2026.02.10 · 법무팀 주관</div>
+          <div class="policy-sec">
+            <h3>1. 처리 단계</h3>
+            <ol>
+              <li><b>1단계 — 감지·접수:</b> 모니터링 자동 감지 또는 제보 접수 시 보안팀이 24시간 내 사실관계를 확인한다.</li>
+              <li><b>2단계 — 평가:</b> 위반의 고의성·반복성·데이터 민감도를 기준으로 경중을 평가한다.</li>
+              <li><b>3단계 — 조치:</b>
+                <ul>
+                  <li>경미(최초·비고의): 교육 재이수 + 부서장 면담</li>
+                  <li>중대(금지 데이터 유출): 인사위원회 회부 + 접근 권한 정지</li>
+                  <li>법령 위반 가능성: 법무팀 이관 및 관계 기관 신고 검토</li>
+                </ul>
+              </li>
+              <li><b>4단계 — 기록:</b> 처리 결과를 거버넌스 위원회에 보고하고 감사 자료로 보존한다.</li>
+            </ol>
+          </div>
+          <div class="callout info">
+            💡 자진 신고한 위반 건은 조치 수위 결정 시 정상 참작됩니다. 실수를 인지한 즉시 보안팀에 알려 주세요.
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <div class="proto-note">
+      정책 개정은 AI 거버넌스 위원회 의결을 거치며, 개정 이력은 감사 리포트에 자동 반영됩니다
+    </div>
+  </main>
+</div>
+
+<script src="../scripts/icons.js"></script>
+<script src="../scripts/nav.js"></script>
+<script src="../scripts/components.js"></script>
+<script>
+/* 정책 관리 페이지 로직 (페이지 전용 — 공용 모듈 없음) */
+(function () {
+  'use strict';
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var nav = document.querySelector('.policy-nav');
+    nav.addEventListener('click', function (e) {
+      var btn = e.target.closest('button[data-policy]');
+      if (!btn) return;
+      nav.querySelectorAll('button').forEach(function (b) { b.classList.remove('on'); });
+      btn.classList.add('on');
+      document.querySelectorAll('.policy-content').forEach(function (a) {
+        a.hidden = a.id !== btn.dataset.policy;
+      });
+    });
+
+    document.getElementById('btnPdf').addEventListener('click', function () {
+      UI.toast('📄 정책 문서 PDF 생성 — 데모 환경에서는 다운로드가 시뮬레이션됩니다.');
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAOU AI Governance — 리스크 관리</title>
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../styles/base.css">
+<link rel="stylesheet" href="../styles/layout.css">
+<link rel="stylesheet" href="../styles/components.css">
+</head>
+<body data-page="risk">
+<div class="app">
+
+  <div id="nav-mount"></div>
+
+  <main class="main">
+
+    <div class="topbar">
+      <div>
+        <h1>리스크 관리</h1>
+        <div class="sub">미조치 리스크를 심각도 순으로 관리하고 조치 이력을 기록합니다</div>
+      </div>
+      <div class="top-right">
+        <div class="user">
+          <div class="avatar" aria-hidden="true">김</div>
+          <div class="info"><b>김미주</b><span>AX 운영기획 · CAIO Office</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 리스크 매트릭스 -->
+    <section class="card" style="margin-bottom:16px">
+      <div class="card-head">
+        <h2><span data-icon="risk" data-size="16"></span>리스크 매트릭스</h2>
+        <span class="hint">발생 가능성 × 영향도 · 미조치 5건</span>
+      </div>
+      <div id="riskMatrix" style="max-width:560px;margin:0 auto;"></div>
+    </section>
+
+    <!-- 리스트 + 상세 -->
+    <section class="risk-layout">
+      <div class="card">
+        <div class="card-head">
+          <h2>미조치 리스크</h2>
+          <span class="hint">심각도 순 정렬</span>
+        </div>
+        <div id="riskList"></div>
+      </div>
+
+      <div class="card risk-detail" id="riskDetail">
+        <div class="empty-note">왼쪽 목록에서 리스크를 선택하면 상세 내용이 표시됩니다.</div>
+      </div>
+    </section>
+
+    <div class="proto-note">
+      리스크 조치 이력은 감사 리포트의 컴플라이언스 근거 자료로 자동 축적됩니다
+    </div>
+  </main>
+</div>
+
+<script src="../scripts/icons.js"></script>
+<script src="../scripts/nav.js"></script>
+<script src="../scripts/components.js"></script>
+<script src="../scripts/charts.js"></script>
+<script>
+/* 리스크 관리 페이지 로직 (페이지 전용 — 공용 모듈 없음) */
+(function () {
+  'use strict';
+
+  var RISKS = [
+    {
+      id: 'RSK-001', sev: 'high', sevLabel: '고위험',
+      title: '다우오피스 HR AI — 고영향 AI 사전 영향평가 미실시',
+      ai: 'AI-002 다우오피스 HR AI', owner: '법무팀', dday: 21, due: '2026.07.01', status: 'open',
+      desc: '다우오피스 HR AI는 채용·인사 의사결정에 관여하여 한국 AI 기본법상 고영향 AI에 해당할 가능성이 높으나, 법이 요구하는 사전 영향평가가 아직 실시되지 않았습니다. 과기정통부 고영향 AI 확인 요청 절차도 미착수 상태입니다.',
+      cause: '2026.01.22 법 시행 전 출시된 기능으로, 시행 시점에 소급 점검 프로세스가 없었음.',
+      steps: ['과기정통부 고영향 AI 해당 여부 확인 요청 제출 (법무팀)', '사전 영향평가 수행 — 편향성·차별 가능성 분석 (XI Lab 주관)', '평가 결과 기반 위험 완화 조치 수립 및 문서화', '거버넌스 위원회 보고 및 인벤토리 등급 재확정'],
+      reg: '한국 AI 기본법 — 고영향 AI 사전 영향평가 의무 (채용·인사 등 개인의 권익에 중대한 영향을 미치는 AI)',
+      lx: 0.72, ly: 0.85,
+      history: [
+        { date: '2026.06.08', text: '법무팀 검토 착수 · 확인 요청 서류 초안 작성' },
+        { date: '2026.06.02', text: '거버넌스 위원회 긴급 안건 상정' },
+        { date: '2026.05.27', text: '리스크 등록 (XI Lab)' }
+      ]
+    },
+    {
+      id: 'RSK-002', sev: 'high', sevLabel: '고위험',
+      title: 'EU AI Act — 고위험 AI 의무 준수 문서 미비',
+      ai: 'AI-002 다우오피스 HR AI', owner: 'XI Lab', dday: 84, due: '2026.09.02', status: 'open',
+      desc: 'EU 시장에 서비스되는 고위험 AI에 요구되는 기술 문서, 위험 관리 체계 문서, 적합성 평가 자료가 준비되어 있지 않습니다. Digital Omnibus(2026.05.07)로 의무 기한이 2027.12.02로 연장되었으나, 문서 체계 구축에 장기간이 소요되어 선제 대응이 필요합니다.',
+      cause: 'EU 역외 적용 범위에 대한 내부 인식 부족. EU 소재 고객사 보유 여부 전수 조사 미실시.',
+      steps: ['EU 소재 고객사·이용자 현황 전수 조사', 'EU AI Act Annex IV 기술 문서 템플릿 작성', '위험 관리 체계(RMS) 문서화', '적합성 평가 경로 결정 (자체 평가 vs 제3자 인증)'],
+      reg: 'EU AI Act 제11조(기술 문서)·제9조(위험 관리 체계) — 고위험 AI 의무, 기한 2027.12.02 (Digital Omnibus 연장)',
+      lx: 0.55, ly: 0.78,
+      history: [
+        { date: '2026.05.30', text: 'EU 고객사 조사 계획 수립' },
+        { date: '2026.05.12', text: '리스크 등록 (법무팀 제보)' }
+      ]
+    },
+    {
+      id: 'RSK-003', sev: 'mid', sevLabel: '중위험',
+      title: 'Gemini — 전직원 사용 중 AI 사용 고지 미적용',
+      ai: 'AI-006 Gemini for Workspace', owner: '경영지원본부', dday: 14, due: '2026.06.24', status: 'open',
+      desc: 'Gemini가 전직원에게 확대 적용되었으나, AI가 작성·요약한 산출물에 대한 사용 고지 기준이 적용되지 않고 있습니다. 고객사 대상 문서에 AI 생성 내용이 고지 없이 포함될 위험이 있습니다.',
+      cause: '전직원 확대(2026.04) 시점에 사용 고지 가이드라인 배포가 누락됨.',
+      steps: ['AI 사용 고지 표준 문구 확정 (정책 관리 페이지 반영)', '고객사 대상 문서 템플릿에 고지 문구 자동 삽입', '전직원 공지 및 교육 모듈 업데이트'],
+      reg: '한국 AI 기본법 제31조 — 생성형 AI 사용 사실 고지 의무',
+      lx: 0.80, ly: 0.45,
+      history: [
+        { date: '2026.06.04', text: '고지 문구 초안 법무팀 검토 중' },
+        { date: '2026.05.28', text: '리스크 등록' }
+      ]
+    },
+    {
+      id: 'RSK-004', sev: 'mid', sevLabel: '중위험',
+      title: '알리GPT — GPT-3.5 API 계약 데이터 처리 조항 재검토 필요',
+      ai: 'AI-005 알리GPT', owner: '보안팀', dday: 30, due: '2026.07.10', status: 'open',
+      desc: '알리GPT가 사용하는 외부 GPT-3.5 API 계약의 데이터 처리 조항이 현행 사내 데이터 보안 원칙(고객 데이터 학습 미사용 보장)을 충분히 담보하는지 재검토가 필요합니다.',
+      cause: '계약 체결(2025) 이후 사내 데이터 보안 원칙이 강화되었으나 계약 조항 동기화가 이루어지지 않음.',
+      steps: ['현행 계약서 데이터 처리 조항 전수 검토 (보안팀·법무팀)', '학습 미사용(zero retention) 보장 조항 추가 협상', '대안 API 공급자 비교 검토 (협상 결렬 대비)'],
+      reg: '사내 데이터 보안 원칙 — 고객 데이터 AI 학습 미사용 · 개인정보보호법 제26조(처리 위탁)',
+      lx: 0.45, ly: 0.52,
+      history: [
+        { date: '2026.05.12', text: '계약서 검토 착수' },
+        { date: '2026.05.08', text: '리스크 등록 (보안팀)' }
+      ]
+    },
+    {
+      id: 'RSK-005', sev: 'mid', sevLabel: '중위험',
+      title: '뿌리오 AI — AI 생성 콘텐츠 워터마킹 의무 대응 계획 없음',
+      ai: 'AI-003 뿌리오 AI', owner: '서비스개발본부', dday: 174, due: '2026.12.01', status: 'open',
+      desc: 'EU AI Act 워터마킹 의무가 2026.12.02 발효됩니다. 뿌리오 AI가 생성하는 마케팅 문자에 기계 판독 가능한 워터마킹(C2PA 등)이 적용되어 있지 않으며, 대응 로드맵도 수립되지 않았습니다.',
+      cause: '문자 메시지 매체 특성상 워터마킹 기술 적용 방식이 불명확하여 검토가 지연됨.',
+      steps: ['텍스트 콘텐츠 워터마킹 기술 옵션 조사 (메타데이터·발신 채널 표기 등)', '한국 AI 기본법 이원화 표시(사람 인식 + 기계 판독) 동시 충족 방안 설계', '제품 로드맵 반영 및 개발 일정 확정 (2026.10 출시 목표)'],
+      reg: 'EU AI Act 제50조 — AI 생성 콘텐츠 워터마킹 의무 (2026.12.02 발효) · 한국 AI 기본법 — AI 생성물 표시',
+      lx: 0.62, ly: 0.40,
+      history: [
+        { date: '2026.06.05', text: '리스크 등록 · 기술 조사 착수' }
+      ]
+    }
+  ];
+
+  var selected = null;
+  var cssRoot = getComputedStyle(document.documentElement);
+  function v(name) { return cssRoot.getPropertyValue(name).trim(); }
+
+  /* ── 2×2 SVG 리스크 매트릭스 ───────────── */
+  function renderMatrix() {
+    var W = 560, H = 320, padL = 64, padB = 46, padT = 16, padR = 16;
+    var pw = W - padL - padR, ph = H - padT - padB;
+    var NS = 'http://www.w3.org/2000/svg';
+    function el(tag, attrs, parent) {
+      var n = document.createElementNS(NS, tag);
+      for (var k in attrs) n.setAttribute(k, attrs[k]);
+      if (parent) parent.appendChild(n);
+      return n;
+    }
+    var box = document.getElementById('riskMatrix');
+    box.innerHTML = '';
+    var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': '리스크 매트릭스 — 발생 가능성과 영향도' }, box);
+    svg.style.width = '100%'; svg.style.height = 'auto';
+
+    // 사분면 배경
+    var quads = [
+      { x: 0, y: 0.5, c: v('--mid-bg') },   // 좌상: 영향 높음·가능성 낮음
+      { x: 0.5, y: 0.5, c: v('--high-bg') },// 우상: 둘 다 높음
+      { x: 0, y: 0, c: v('--low-bg') },     // 좌하
+      { x: 0.5, y: 0, c: v('--mid-bg') }    // 우하
+    ];
+    quads.forEach(function (q) {
+      el('rect', {
+        x: padL + q.x * pw, y: padT + (1 - q.y - 0.5) * ph,
+        width: pw / 2, height: ph / 2, fill: q.c, rx: 6
+      }, svg);
+    });
+
+    // 그리드 라인
+    el('line', { x1: padL + pw / 2, y1: padT, x2: padL + pw / 2, y2: padT + ph, stroke: v('--card'), 'stroke-width': 3 }, svg);
+    el('line', { x1: padL, y1: padT + ph / 2, x2: padL + pw, y2: padT + ph / 2, stroke: v('--card'), 'stroke-width': 3 }, svg);
+
+    // 축 라벨
+    function txt(x, y, t, anchor, size, weight, rotate) {
+      var n = el('text', { x: x, y: y, 'text-anchor': anchor || 'middle', 'font-size': size || 11, 'font-weight': weight || 600, fill: v('--sub'), 'font-family': 'inherit' }, svg);
+      if (rotate) n.setAttribute('transform', 'rotate(-90 ' + x + ' ' + y + ')');
+      n.textContent = t;
+      return n;
+    }
+    txt(padL + pw / 2, H - 8, '발생 가능성 →', 'middle', 12, 700);
+    txt(padL + pw * 0.25, H - 26, '낮음');
+    txt(padL + pw * 0.75, H - 26, '높음');
+    txt(20, padT + ph / 2, '영향도 →', 'middle', 12, 700, true);
+    txt(42, padT + ph * 0.25, '높음');
+    txt(42, padT + ph * 0.75, '낮음');
+
+    // 리스크 점 플롯
+    RISKS.forEach(function (r) {
+      if (r.status === 'closed') return;
+      var cx = padL + r.lx * pw;
+      var cy = padT + (1 - r.ly) * ph;
+      var color = r.sev === 'high' ? v('--high') : v('--mid');
+      var g = el('g', { cursor: 'pointer' }, svg);
+      el('circle', { cx: cx, cy: cy, r: 9, fill: color, opacity: 0.18 }, g);
+      el('circle', { cx: cx, cy: cy, r: 5.5, fill: color, stroke: v('--card'), 'stroke-width': 2 }, g);
+      var label = txt(cx + 12, cy + 4, r.id.replace('RSK-0', 'R'), 'start', 10.5, 800);
+      label.setAttribute('fill', color);
+      g.appendChild(label);
+      g.addEventListener('click', function () { select(r.id); });
+    });
+  }
+
+  /* ── 리스크 목록 ───────────────────────── */
+  function renderList() {
+    var list = document.getElementById('riskList');
+    list.innerHTML = '';
+    var sorted = RISKS.slice().sort(function (a, b) {
+      if (a.status !== b.status) return a.status === 'open' ? -1 : 1;
+      if (a.sev !== b.sev) return a.sev === 'high' ? -1 : 1;
+      return a.dday - b.dday;
+    });
+    sorted.forEach(function (r) {
+      var div = document.createElement('div');
+      div.className = 'risk-item' + (r.status === 'closed' ? ' closed' : '') + (selected === r.id ? ' selected' : '');
+      div.setAttribute('role', 'button');
+      div.setAttribute('tabindex', '0');
+      div.dataset.id = r.id;
+      div.innerHTML =
+        '<div class="r-body">' +
+          '<span class="r-id">' + r.id + '</span>' +
+          '<div class="r-title">' + r.title + '</div>' +
+          '<div class="r-meta">' + r.ai + ' · 담당 ' + r.owner + ' · 기한 ' + r.due + '</div>' +
+        '</div>' +
+        '<div style="text-align:right;flex-shrink:0">' +
+          '<span class="risk ' + r.sev + '">' + r.sevLabel + '</span><br>' +
+          (r.status === 'closed'
+            ? '<span class="dday green" style="margin-top:6px">조치 완료</span>'
+            : '<span class="dday ' + (r.dday <= 30 ? 'red' : 'amber') + '" style="margin-top:6px">D-' + r.dday + '</span>') +
+        '</div>';
+      list.appendChild(div);
+    });
+  }
+
+  /* ── 상세 패널 ─────────────────────────── */
+  function renderDetail() {
+    var box = document.getElementById('riskDetail');
+    var r = RISKS.find(function (x) { return x.id === selected; });
+    if (!r) {
+      box.innerHTML = '<div class="empty-note">왼쪽 목록에서 리스크를 선택하면 상세 내용이 표시됩니다.</div>';
+      return;
+    }
+    box.innerHTML =
+      '<div class="card-head"><h2>' + r.id + ' 상세</h2><span class="risk ' + r.sev + '">' + r.sevLabel + '</span></div>' +
+      '<div class="p-section"><h4>리스크 설명</h4><p class="rd-desc">' + r.desc + '</p></div>' +
+      '<div class="p-section"><h4>근본 원인</h4><p class="rd-desc">' + r.cause + '</p></div>' +
+      '<div class="p-section"><h4>조치 계획</h4><ol>' +
+        r.steps.map(function (s) { return '<li>' + s + '</li>'; }).join('') + '</ol></div>' +
+      '<div class="p-section"><h4>연계 규제 조항</h4><div class="reg-box">' + r.reg + '</div></div>' +
+      '<div class="p-section">' +
+        '<div class="p-kv"><span class="k">연계 AI 시스템</span><span class="v">' + r.ai + '</span></div>' +
+        '<div class="p-kv"><span class="k">담당</span><span class="v">' + r.owner + '</span></div>' +
+        '<div class="p-kv"><span class="k">조치 기한</span><span class="v">' + r.due + ' (D-' + r.dday + ')</span></div>' +
+        '<div class="p-kv"><span class="k">상태</span><span class="v">' + (r.status === 'open' ? '조치 중' : '조치 완료') + '</span></div>' +
+      '</div>' +
+      '<div class="p-section"><h4>이력</h4><ul class="timeline">' +
+        r.history.map(function (h) { return '<li><span class="t-date">' + h.date + '</span>' + h.text + '</li>'; }).join('') +
+      '</ul></div>' +
+      (r.status === 'open'
+        ? '<button class="btn-primary" style="width:100%" data-close-risk="' + r.id + '">✓ 위험 조치 완료</button>'
+        : '<div class="dday green" style="width:100%;text-align:center;padding:10px">이 리스크는 조치 완료되었습니다</div>');
+  }
+
+  function select(id) {
+    selected = id;
+    renderList();
+    renderDetail();
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    renderMatrix();
+    renderList();
+    renderDetail();
+
+    document.getElementById('riskList').addEventListener('click', function (e) {
+      var item = e.target.closest('.risk-item');
+      if (item) select(item.dataset.id);
+    });
+    document.getElementById('riskList').addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      var item = e.target.closest('.risk-item');
+      if (item) { e.preventDefault(); select(item.dataset.id); }
+    });
+
+    document.getElementById('riskDetail').addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-close-risk]');
+      if (!btn) return;
+      var r = RISKS.find(function (x) { return x.id === btn.dataset.closeRisk; });
+      if (!r) return;
+      r.status = 'closed';
+      r.history.unshift({ date: '2026.06.11', text: '조치 완료 처리 (김미주 · CAIO Office)' });
+      renderMatrix();
+      renderList();
+      renderDetail();
+      UI.toast('✓ ' + r.id + ' 조치 완료로 처리되었습니다. 이력이 감사 자료에 기록됩니다.');
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAOU AI Governance — 모니터링</title>
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../styles/base.css">
+<link rel="stylesheet" href="../styles/layout.css">
+<link rel="stylesheet" href="../styles/components.css">
+</head>
+<body data-page="monitoring">
+<div class="app">
+
+  <div id="nav-mount"></div>
+
+  <main class="main">
+
+    <div class="topbar">
+      <div>
+        <h1>모니터링</h1>
+        <div class="sub">시스템별 AI 사용량과 이상 징후를 추적합니다 · 데이터 기준 2026.06.01 – 06.07</div>
+      </div>
+      <div class="top-right">
+        <div class="user">
+          <div class="avatar" aria-hidden="true">김</div>
+          <div class="info"><b>김미주</b><span>AX 운영기획 · CAIO Office</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 호출량 추이 -->
+    <section class="card" style="margin-bottom:16px">
+      <div class="card-head">
+        <h2><span data-icon="monitoring" data-size="16"></span>일별 AI API 호출량</h2>
+        <span class="hint">최근 7일 · 시스템별 (호출/일) · 차트 위에 마우스를 올리면 상세 값이 표시됩니다</span>
+      </div>
+      <div id="usageChart"></div>
+      <div class="legend" style="display:flex;gap:18px;flex-wrap:wrap;margin-top:10px" id="usageLegend"></div>
+    </section>
+
+    <!-- 시스템 헬스 -->
+    <section class="card" style="margin-bottom:16px">
+      <div class="card-head">
+        <h2><span data-icon="check" data-size="16"></span>시스템 헬스</h2>
+        <span class="hint">최근 24시간 기준</span>
+      </div>
+      <div class="health-grid" id="healthGrid"></div>
+    </section>
+
+    <!-- 이상 징후 로그 -->
+    <section class="card">
+      <div class="card-head">
+        <h2><span data-icon="risk" data-size="16"></span>이상 징후 로그</h2>
+        <span class="hint">최근 7일 · 5건</span>
+      </div>
+      <div class="table-wrap">
+        <table role="table">
+          <thead>
+            <tr><th>시각</th><th>시스템</th><th>이벤트 유형</th><th>심각도</th><th>상태</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="td-sub">2026.06.10 14:22</td>
+              <td><span class="ai-name">알리GPT</span></td>
+              <td>응답 지연 급증 (p95 8.4초)</td>
+              <td><span class="sev warn">경고</span></td>
+              <td><span class="status rev"><span class="s-dot"></span>조치 중</span></td>
+            </tr>
+            <tr>
+              <td class="td-sub">2026.06.10 09:05</td>
+              <td><span class="ai-name">Gemini</span></td>
+              <td>금지 데이터 패턴 감지 (주민등록번호 의심 입력)</td>
+              <td><span class="sev crit">심각</span></td>
+              <td><span class="status ok"><span class="s-dot"></span>조치 완료</span></td>
+            </tr>
+            <tr>
+              <td class="td-sub">2026.06.09 16:40</td>
+              <td><span class="ai-name">다우오피스 AI</span></td>
+              <td>호출량 급증 (+38% 전주 대비)</td>
+              <td><span class="sev info">정보</span></td>
+              <td><span class="status ok"><span class="s-dot"></span>확인 완료</span></td>
+            </tr>
+            <tr>
+              <td class="td-sub">2026.06.08 11:18</td>
+              <td><span class="ai-name">뿌리오 AI</span></td>
+              <td>API 오류율 2.1% — 임계치(2.0%) 초과</td>
+              <td><span class="sev warn">경고</span></td>
+              <td><span class="status ok"><span class="s-dot"></span>조치 완료</span></td>
+            </tr>
+            <tr>
+              <td class="td-sub">2026.06.07 20:51</td>
+              <td><span class="ai-name">Claude Code</span></td>
+              <td>미등록 모델 버전 사용 감지 (자동 차단)</td>
+              <td><span class="sev info">정보</span></td>
+              <td><span class="status ok"><span class="s-dot"></span>확인 완료</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="proto-note">
+      이상 징후는 사전 정의된 거버넌스 규칙(금지 데이터 패턴 · 오류율 임계치 · 사용량 급변)에 따라 자동 감지됩니다
+    </div>
+  </main>
+</div>
+
+<script src="../scripts/icons.js"></script>
+<script src="../scripts/nav.js"></script>
+<script src="../scripts/components.js"></script>
+<script src="../scripts/charts.js"></script>
+<script>
+/* 모니터링 페이지 로직 (페이지 전용 — 공용 모듈 없음) */
+(function () {
+  'use strict';
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var css = getComputedStyle(document.documentElement);
+    function v(name) { return css.getPropertyValue(name).trim(); }
+
+    var SERIES = [
+      { name: '다우오피스 AI', data: [1240, 1380, 1290, 1450, 1510, 980, 860], color: v('--blue') },
+      { name: 'Gemini',        data: [540, 610, 580, 720, 695, 320, 410],      color: v('--purple') },
+      { name: '뿌리오 AI',     data: [320, 290, 410, 380, 440, 210, 190],      color: v('--mid') },
+      { name: '알리GPT',       data: [88, 92, 79, 105, 98, 45, 51],            color: v('--low') },
+      { name: 'Claude Code',   data: [28, 35, 41, 38, 52, 12, 19],             color: v('--high') }
+    ];
+    var LABELS = ['06.01 (월)', '06.02 (화)', '06.03 (수)', '06.04 (목)', '06.05 (금)', '06.06 (토)', '06.07 (일)'];
+
+    SVGCharts.line('usageChart', { series: SERIES, labels: LABELS, height: 240 });
+
+    // 범례
+    var legend = document.getElementById('usageLegend');
+    SERIES.forEach(function (s) {
+      var row = document.createElement('div');
+      row.className = 'l-row';
+      row.style.padding = '0';
+      row.innerHTML = '<span class="l-dot" style="background:' + s.color + '"></span>' + s.name;
+      legend.appendChild(row);
+    });
+
+    // 시스템 헬스 그리드 (최근 24시간)
+    var HEALTH = [
+      { name: '다우오피스 AI', dot: 'g', calls: '1,510', err: '0.3%' },
+      { name: '다우오피스 HR AI', dot: 'a', calls: '214', err: '0.9% · 감시 중' },
+      { name: '뿌리오 AI', dot: 'g', calls: '440', err: '1.2%' },
+      { name: '사방넷 AI', dot: 'g', calls: '362', err: '0.5%' },
+      { name: '알리GPT', dot: 'a', calls: '98', err: '1.8% · 지연 조치 중' },
+      { name: 'Gemini', dot: 'g', calls: '695', err: '0.4%' },
+      { name: 'Claude Code', dot: 'g', calls: '52', err: '0.2%' }
+    ];
+    var grid = document.getElementById('healthGrid');
+    HEALTH.forEach(function (h) {
+      var card = document.createElement('div');
+      card.className = 'health-card';
+      card.innerHTML =
+        '<div class="h-top"><span class="h-dot ' + h.dot + '"></span><b>' + h.name + '</b></div>' +
+        '<div class="h-stats">' +
+          '<span>24h 호출<strong>' + h.calls + '</strong></span>' +
+          '<span>오류율<strong>' + h.err + '</strong></span>' +
+        '</div>';
+      grid.appendChild(card);
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+/* ════════════════════════════════════════════
+   base.css — CSS variables, reset, typography
+   DAOU AI Governance Platform
+   ════════════════════════════════════════════ */
+
+:root{
+  /* ── 다우기술 브랜드 컬러 ──
+     이 4개 변수만 바꾸면 전체 플랫폼 색상이 일괄 변경됩니다 */
+  --brand:#1f7dc2;        /* 다우 블루 (로고 배경색) */
+  --brand-deep:#13629c;   /* 진한 다우 블루 — 호버·토스트·아바타 */
+  --brand-soft:#e9f3fb;   /* 연한 배경 — 칩·정보 패널 */
+  --brand-accent:#cfe7f8; /* 사이드바 보조 텍스트 */
+
+  /* 아래는 브랜드 변수에 연결된 별칭 — 기존 컴포넌트 호환용 */
+  --navy:var(--brand-deep);
+  --navy-2:var(--brand);
+  --blue:var(--brand);
+  --blue-hover:var(--brand-deep);
+  --blue-soft:var(--brand-soft);
+
+  /* surface */
+  --bg:#f4f6fa;
+  --card:#ffffff;
+  --line:#e6eaf2;
+  --row-line:#f0f2f7;
+  --row-hover:#f8fafd;
+  --bar-bg:#edf0f6;
+  --step-bg:#e8ecf3;
+  --input-border:#d8deea;
+  --input-bg:#fbfcfe;
+
+  /* text */
+  --txt:#1a2236;
+  --sub:#6b7589;
+  --info-txt:#3b5bb8;
+
+  /* sidebar text scale (다우 블루 배경 기준) */
+  --side-txt:#eaf4fc;
+  --side-sub:#c4e0f5;
+  --side-label:#a8d2ef;
+  --side-foot:#bcdcf3;
+  --badge-red:#e84545;
+
+  /* risk semantic */
+  --high:#dc2626; --high-bg:#fdecec;
+  --mid:#d97706;  --mid-bg:#fdf3e3;
+  --low:#059669;  --low-bg:#e6f6f0;
+
+  /* extra accents */
+  --purple:#7c3aed; --purple-bg:#f3eefe;
+
+  /* stage neutral */
+  --stage1-bg:#eef1f6;
+  --stage1-txt:#5b6478;
+
+  /* shape */
+  --radius:14px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  font-family:"Pretendard Variable",Pretendard,-apple-system,"Segoe UI","Malgun Gothic",sans-serif;
+  background:var(--bg);
+  color:var(--txt);
+  font-size:14px;
+  letter-spacing:-0.01em;
+}
+
+a{text-decoration:none;color:inherit;}
+
+button{font-family:inherit;}
+
+:focus-visible{
+  outline:2px solid var(--blue);
+  outline-offset:2px;
+  border-radius:4px;
+}
+
+/* trend text */
+.up{color:var(--low);}
+.down{color:var(--high);}
+.warn-t{color:var(--mid);}
+
+.td-sub{color:var(--sub); font-size:12px;}
+
+/* footer note */
+.proto-note{
+  font-size:11.5px; color:var(--sub); text-align:center; margin-top:26px; line-height:1.7;
+}

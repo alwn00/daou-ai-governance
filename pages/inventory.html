@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAOU AI Governance — AI 인벤토리</title>
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../styles/base.css">
+<link rel="stylesheet" href="../styles/layout.css">
+<link rel="stylesheet" href="../styles/components.css">
+<link rel="stylesheet" href="../styles/pages/inventory.css">
+</head>
+<body data-page="inventory">
+<div class="app">
+
+  <div id="nav-mount"></div>
+
+  <main class="main">
+
+    <div class="topbar">
+      <div>
+        <h1>AI 인벤토리</h1>
+        <div class="sub">전사에서 운영 중인 모든 AI 시스템의 등록 현황과 검토 이력을 관리합니다</div>
+      </div>
+      <div class="top-right">
+        <div class="user">
+          <div class="avatar" aria-hidden="true">김</div>
+          <div class="info"><b>김미주</b><span>AX 운영기획 · CAIO Office</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 요약 통계 + 분포 도넛 -->
+    <section class="card inv-summary">
+      <div class="inv-donut" id="invDonut"></div>
+      <div class="stat-row">
+        <div class="stat-item"><span class="s-label">전체</span><span class="s-val">7건</span></div>
+        <span class="stat-sep"></span>
+        <div class="stat-item"><span class="s-label">고위험</span><span class="s-val c-high">1</span></div>
+        <div class="stat-item"><span class="s-label">중위험</span><span class="s-val c-mid">4</span></div>
+        <div class="stat-item"><span class="s-label">저위험</span><span class="s-val c-low">2</span></div>
+        <span class="stat-sep"></span>
+        <div class="stat-item"><span class="s-label">신규 심사</span><span class="s-val c-blue">3건</span></div>
+      </div>
+    </section>
+
+    <!-- 필터 바 -->
+    <section class="filter-bar" aria-label="인벤토리 필터">
+      <div class="filter-group">
+        <span class="f-label">유형</span>
+        <div class="seg" data-filter="type" role="group" aria-label="유형 필터">
+          <button class="on" data-val="all">전체</button>
+          <button data-val="제품 탑재">제품 탑재</button>
+          <button data-val="임직원 도구">임직원 도구</button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <span class="f-label">위험 등급</span>
+        <div class="seg" data-filter="risk" role="group" aria-label="위험 등급 필터">
+          <button class="on" data-val="all">전체</button>
+          <button data-val="high">고위험</button>
+          <button data-val="mid">중위험</button>
+          <button data-val="low">저위험</button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <span class="f-label">상태</span>
+        <div class="seg" data-filter="status" role="group" aria-label="상태 필터">
+          <button class="on" data-val="all">전체</button>
+          <button data-val="운영 중">운영 중</button>
+          <button data-val="심사 중">심사 중</button>
+          <button data-val="일시중지">일시중지</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 인벤토리 테이블 -->
+    <section class="card inv-table-card">
+      <div class="card-head">
+        <h2>등록 AI 시스템</h2>
+        <span class="inv-count">표시 중 <b id="invCount">7</b> / 7건</span>
+      </div>
+      <div class="table-wrap">
+        <table role="table">
+          <thead>
+            <tr>
+              <th>AI명</th><th>유형</th><th>위험 등급</th><th>담당 부서</th>
+              <th>등록일</th><th>마지막 검토일</th><th>상태</th><th>액션</th>
+            </tr>
+          </thead>
+          <tbody id="invBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="proto-note">
+      등록·변경은 AI Gate 심사를 통해서만 가능합니다 · 인벤토리는 한국 AI 기본법·EU AI Act 대응의 기초 자료로 사용됩니다
+    </div>
+  </main>
+</div>
+
+<!-- 상세 패널 (우측 슬라이드인) -->
+<div class="panel-bg" id="invPanelBg"></div>
+<aside class="panel" id="invPanel" role="dialog" aria-modal="true" aria-labelledby="invPanelTitle">
+  <div class="panel-head">
+    <div>
+      <h3 id="invPanelTitle"></h3>
+      <div class="p-sub" id="invPanelSub"></div>
+    </div>
+    <button class="panel-close" id="invPanelClose" aria-label="상세 패널 닫기">✕</button>
+  </div>
+  <div class="panel-body" id="invPanelBody"></div>
+</aside>
+
+<script src="../scripts/icons.js"></script>
+<script src="../scripts/nav.js"></script>
+<script src="../scripts/components.js"></script>
+<script src="../scripts/charts.js"></script>
+<script src="../scripts/pages/inventory.js"></script>
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAOU AI Governance — 교육 관리</title>
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../styles/base.css">
+<link rel="stylesheet" href="../styles/layout.css">
+<link rel="stylesheet" href="../styles/components.css">
+</head>
+<body data-page="education">
+<div class="app">
+
+  <div id="nav-mount"></div>
+
+  <main class="main">
+
+    <div class="topbar">
+      <div>
+        <h1>교육 관리</h1>
+        <div class="sub">한국 AI 기본법 의무 AI 리터러시 교육 이수 현황 · 2026 상반기 마감 06.30</div>
+      </div>
+      <div class="top-right">
+        <button class="btn-primary" id="btnRemind"><span data-icon="send" data-size="14" style="vertical-align:-2px;margin-right:6px"></span>미이수자 알림 일괄 발송</button>
+        <div class="user">
+          <div class="avatar" aria-hidden="true">김</div>
+          <div class="info"><b>김미주</b><span>AX 운영기획 · CAIO Office</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 상단 통계 -->
+    <section class="edu-stats">
+      <div class="kpi" style="cursor:default">
+        <div class="k-top"><span class="k-title">전사 이수율</span></div>
+        <div class="gauge-wrap"><div id="eduGauge" style="width:180px"></div></div>
+      </div>
+      <div class="kpi" style="cursor:default">
+        <div class="k-top">
+          <span class="k-title">미이수 인원</span>
+          <span class="k-ico" style="background:var(--high-bg);color:var(--high)" data-icon="users"></span>
+        </div>
+        <div class="k-val">52<small>명</small></div>
+        <div class="k-foot"><b class="down">경영지원본부 21명</b> 최다</div>
+      </div>
+      <div class="kpi" style="cursor:default">
+        <div class="k-top">
+          <span class="k-title">마감까지</span>
+          <span class="k-ico" style="background:var(--mid-bg);color:var(--mid)" data-icon="clock"></span>
+        </div>
+        <div class="k-val">D-20</div>
+        <div class="k-foot">2026.06.30 (화) 마감</div>
+      </div>
+      <div class="kpi" style="cursor:default">
+        <div class="k-top">
+          <span class="k-title">이번 주 신규 이수</span>
+          <span class="k-ico" style="background:var(--low-bg);color:var(--low)" data-icon="check"></span>
+        </div>
+        <div class="k-val">23<small>명</small></div>
+        <div class="k-foot"><b class="up">전주 대비 +9명</b></div>
+      </div>
+    </section>
+
+    <section class="grid g-1-1">
+      <!-- 부서별 진행률 -->
+      <div class="card">
+        <div class="card-head">
+          <h2><span data-icon="education" data-size="16"></span>부서별 이수 현황</h2>
+          <span class="hint">부서를 클릭하면 명단이 표시됩니다</span>
+        </div>
+        <div id="deptBars"></div>
+        <div class="edu-note">
+          한국 AI 기본법상 AI 리터러시 교육은 <b>의무 사항</b>입니다. 이수 이력은 컴플라이언스 근거 자료로 자동 축적되며, 미이수자에게는 매주 월요일 알림이 발송됩니다.
+        </div>
+      </div>
+
+      <!-- 커리큘럼 -->
+      <div class="card">
+        <div class="card-head">
+          <h2>📚 교육 커리큘럼</h2>
+          <span class="hint">총 3개 모듈 · 약 90분</span>
+        </div>
+        <div class="curri">
+          <div class="c-top"><span class="c-num">1</span><b>AI 기본 이해와 한국 AI 기본법</b></div>
+          <p>생성형 AI의 동작 원리, 한국 AI 기본법의 핵심 의무(고지·표시·고영향 AI), 회사에 적용되는 규제 범위를 다룹니다.</p>
+          <div class="c-meta">30분 · 온라인 강의 + 퀴즈 5문항</div>
+        </div>
+        <div class="curri">
+          <div class="c-top"><span class="c-num">2</span><b>사내 AI 사용 정책과 금지 데이터</b></div>
+          <p>임직원 AI 사용 원칙, 금지 데이터 유형(고객사 영업비밀·개인식별정보 등), 위반 시 처리 절차를 사례 중심으로 학습합니다.</p>
+          <div class="c-meta">35분 · 온라인 강의 + 사례 실습</div>
+        </div>
+        <div class="curri">
+          <div class="c-top"><span class="c-num">3</span><b>안전한 AI 활용 실무</b></div>
+          <p>프롬프트 작성 시 데이터 비식별화, AI 산출물 검증 방법, AI 사용 사실 문서화·고지 실무를 다룹니다.</p>
+          <div class="c-meta">25분 · 실습형 · 수료 평가 10문항 (70점 이상 이수)</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 부서별 명단 드릴다운 -->
+    <section class="card">
+      <div class="card-head">
+        <h2 id="rosterTitle">부서별 이수 명단 — XI Lab</h2>
+        <span class="hint" id="rosterHint"></span>
+      </div>
+      <div class="table-wrap">
+        <table role="table">
+          <thead>
+            <tr><th>이름</th><th>직책</th><th>이수 상태</th><th>이수일</th></tr>
+          </thead>
+          <tbody id="rosterBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="proto-note">
+      교육 이수 데이터는 LMS와 연동되며, 감사 리포트의 ‘AI 리터러시 교육’ 항목 근거 자료로 사용됩니다
+    </div>
+  </main>
+</div>
+
+<script src="../scripts/icons.js"></script>
+<script src="../scripts/nav.js"></script>
+<script src="../scripts/components.js"></script>
+<script src="../scripts/charts.js"></script>
+<script>
+/* 교육 관리 페이지 로직 (페이지 전용 — 공용 모듈 없음) */
+(function () {
+  'use strict';
+
+  var DEPTS = [
+    {
+      name: 'XI Lab', rate: 95, total: 20, done: 19,
+      roster: [
+        { name: '김미주', title: 'AX 운영기획', done: true, date: '2026.04.02' },
+        { name: '이준영', title: '책임 연구원', done: true, date: '2026.04.05' },
+        { name: '박소연', title: '선임 기획', done: true, date: '2026.04.11' },
+        { name: '정우진', title: '데이터 분석', done: true, date: '2026.05.02' },
+        { name: '문가영', title: '신규 입사 (06.01)', done: false, date: '—' }
+      ]
+    },
+    {
+      name: '서비스개발본부', rate: 82, total: 96, done: 79,
+      roster: [
+        { name: '이서연', title: '수석 (HR AI 담당)', done: true, date: '2026.03.28' },
+        { name: '김도현', title: '수석 (개발도구)', done: true, date: '2026.04.09' },
+        { name: '정태우', title: '책임 (사방넷 AI)', done: true, date: '2026.04.15' },
+        { name: '박지훈', title: '책임 (다우오피스 AI)', done: true, date: '2026.05.07' },
+        { name: '최윤서', title: '선임 개발', done: false, date: '—' },
+        { name: '한승민', title: '주임 개발', done: false, date: '—' }
+      ]
+    },
+    {
+      name: '비즈마케팅부문', rate: 76, total: 54, done: 41,
+      roster: [
+        { name: '최민호', title: '팀장 (뿌리오 AI)', done: true, date: '2026.04.20' },
+        { name: '강예린', title: '선임 마케터', done: true, date: '2026.05.11' },
+        { name: '윤성호', title: '퍼포먼스 마케팅', done: false, date: '—' },
+        { name: '임다은', title: '콘텐츠 기획', done: false, date: '—' }
+      ]
+    },
+    {
+      name: '영업본부', rate: 71, total: 62, done: 44,
+      roster: [
+        { name: '서동현', title: '본부장', done: true, date: '2026.05.18' },
+        { name: '김하늘', title: '엔터프라이즈 영업', done: true, date: '2026.05.25' },
+        { name: '조민재', title: '채널 영업', done: false, date: '—' },
+        { name: '배수지', title: '영업 지원', done: false, date: '—' }
+      ]
+    },
+    {
+      name: '경영지원본부', rate: 64, total: 58, done: 37,
+      roster: [
+        { name: '오세훈', title: '차장 (Gemini 운영)', done: true, date: '2026.05.30' },
+        { name: '신지아', title: '인사팀', done: false, date: '—' },
+        { name: '권태양', title: '총무팀', done: false, date: '—' },
+        { name: '황보라', title: '재무팀', done: false, date: '—' }
+      ]
+    },
+    {
+      name: '고객지원본부', rate: 81, total: 43, done: 35,
+      roster: [
+        { name: '한지원', title: '매니저 (알리GPT)', done: true, date: '2026.04.25' },
+        { name: '노유진', title: 'CS 리드', done: true, date: '2026.05.14' },
+        { name: '장현수', title: '기술 지원', done: false, date: '—' }
+      ]
+    }
+  ];
+
+  function barColorClass(rate) {
+    if (rate < 70) return 'danger';
+    if (rate < 75) return 'warn';
+    return '';
+  }
+  function rateColor(rate, css) {
+    if (rate < 70) return css.getPropertyValue('--high').trim();
+    if (rate < 75) return css.getPropertyValue('--mid').trim();
+    if (rate >= 90) return css.getPropertyValue('--low').trim();
+    return css.getPropertyValue('--blue').trim();
+  }
+
+  function renderRoster(dept) {
+    document.getElementById('rosterTitle').textContent = '부서별 이수 명단 — ' + dept.name;
+    document.getElementById('rosterHint').textContent =
+      '인원 ' + dept.total + '명 · 이수 ' + dept.done + '명 · 미이수 ' + (dept.total - dept.done) + '명 (대표 명단 표시)';
+    var tbody = document.getElementById('rosterBody');
+    tbody.innerHTML = '';
+    dept.roster.forEach(function (p) {
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td><span class="ai-name">' + p.name + '</span></td>' +
+        '<td class="td-sub">' + p.title + '</td>' +
+        '<td>' + (p.done
+          ? '<span class="status ok"><span class="s-dot"></span>이수 완료</span>'
+          : '<span class="status act"><span class="s-dot"></span>미이수</span>') + '</td>' +
+        '<td class="td-sub">' + p.date + '</td>';
+      tbody.appendChild(tr);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var css = getComputedStyle(document.documentElement);
+
+    // 전사 이수율 반원 게이지 (SVG, 로드 애니메이션)
+    SVGCharts.semicircle('eduGauge', {
+      value: 77,
+      color: css.getPropertyValue('--blue').trim(),
+      label: '전사 이수율'
+    });
+
+    // 부서별 진행 바
+    var bars = document.getElementById('deptBars');
+    DEPTS.forEach(function (d, i) {
+      var row = document.createElement('div');
+      row.className = 'edu-row';
+      row.style.cursor = 'pointer';
+      row.setAttribute('role', 'button');
+      row.setAttribute('tabindex', '0');
+      row.setAttribute('aria-label', d.name + ' 이수율 ' + d.rate + '% — 명단 보기');
+      row.dataset.idx = i;
+      row.innerHTML =
+        '<div class="edu-top"><b>' + d.name + '</b><span style="color:' + rateColor(d.rate, css) + '">' + d.rate + '%</span></div>' +
+        '<div class="bar"><i class="' + barColorClass(d.rate) + '" style="width:0%"></i></div>';
+      bars.appendChild(row);
+      // 로드 애니메이션 (transition은 components.css의 .bar i에 정의)
+      setTimeout(function () { row.querySelector('.bar i').style.width = d.rate + '%'; }, 150);
+    });
+
+    function selectDept(idx) { renderRoster(DEPTS[idx]); }
+    bars.addEventListener('click', function (e) {
+      var row = e.target.closest('.edu-row[data-idx]');
+      if (row) selectDept(+row.dataset.idx);
+    });
+    bars.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      var row = e.target.closest('.edu-row[data-idx]');
+      if (row) { e.preventDefault(); selectDept(+row.dataset.idx); }
+    });
+
+    renderRoster(DEPTS[0]);
+
+    // 미이수자 알림 일괄 발송 (데모)
+    document.getElementById('btnRemind').addEventListener('click', function () {
+      UI.toast('📨 미이수자 52명에게 이수 독려 알림이 발송되었습니다. (데모)');
+    });
+  });
+})();
+</script>
+</body>
+</html>
