@@ -19,10 +19,20 @@
     { page: 'audit', icon: 'audit', text: '감사 리포트' }
   ];
 
+  var DASHBOARD_MENU = [
+    { label: 'ONE SCREEN' },
+    { href: '#', icon: 'dashboard', text: '메인 대시보드', active: true },
+    { href: '#actionRequired', icon: 'risk', text: '조치 필요', badge: 3 },
+    { href: '#aiInventory', icon: 'inventory', text: 'AI 서비스 통제 현황' },
+    { href: '#actionRequired', icon: 'scale', text: '규제/정책 업데이트' }
+  ];
+
   function buildNav() {
-    var items = MENU.map(function (m) {
+    var source = document.body.dataset.page === 'dashboard' ? DASHBOARD_MENU : MENU;
+    var items = source.map(function (m) {
       if (m.label) return '<div class="label">' + m.label + '</div>';
-      return '<a href="' + m.page + '.html" data-page="' + m.page + '">' +
+      var href = m.href || (m.page + '.html');
+      return '<a href="' + href + '" ' + (m.page ? 'data-page="' + m.page + '"' : '') + (m.active ? ' class="active" aria-current="page"' : '') + '>' +
         '<span class="ico" data-icon="' + m.icon + '" data-size="17"></span>' + m.text +
         (m.badge ? '<span class="badge">' + m.badge + '</span>' : '') +
         '</a>';
@@ -48,7 +58,7 @@
 
     var page = document.body.dataset.page;
     var active = document.querySelector('.nav a[data-page="' + page + '"]');
-    if (active) {
+    if (active && !active.classList.contains('active')) {
       active.classList.add('active');
       active.setAttribute('aria-current', 'page');
     }
