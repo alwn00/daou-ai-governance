@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="../styles/layout.css">
 <link rel="stylesheet" href="../styles/components.css">
 <link rel="stylesheet" href="../styles/pages/dashboard.css">
+<link rel="stylesheet" href="../styles/pages/risk-governance.css">
 </head>
 <body data-page="dashboard">
 <div class="app">
@@ -20,7 +21,7 @@
     <div class="topbar">
       <div>
         <h1>AX AI Governance Control Tower</h1>
-        <div class="sub">2026.06.10 (수) 기준 · 고객 제공 서비스와 사내 임직원용 AI를 한 화면에서 분리 관리합니다</div>
+        <div class="sub">2026.06.10 (수) 기준 · AI 리스크 기반 거버넌스 실행 플랫폼 — 고위험 AI를 식별·배정·조치·증빙합니다</div>
       </div>
       <div class="top-right">
         <button class="btn-primary" data-action="open-gate-modal">＋ AI 도입 심사 신청</button>
@@ -30,6 +31,22 @@
         </div>
       </div>
     </div>
+
+    <!-- 역할별 화면 전환(Role-Based View) + 조직 필터 -->
+    <section class="role-bar" aria-label="역할별 보기 권한">
+      <div class="role-bar-top">
+        <div class="role-bar-label">
+          <b>보기 권한</b>
+          <span class="role-badge" id="roleBadge">CAIO 뷰</span>
+        </div>
+        <div class="role-seg" id="roleSeg" role="group" aria-label="역할 선택"></div>
+      </div>
+      <div class="role-desc" id="roleDesc"></div>
+      <div class="org-row">
+        <span class="f-label">관리 조직</span>
+        <div class="org-seg" id="orgSeg" role="group" aria-label="조직 필터"></div>
+      </div>
+    </section>
 
     <!-- 관리 범위 탭 -->
     <section class="scope-tabs" aria-label="AI 관리 범위">
@@ -44,86 +61,17 @@
       </div>
     </section>
 
-    <!-- KPI -->
-    <section class="kpis">
-      <a class="kpi" href="#aiInventory" aria-label="등록 AI 시스템 7개 — AI 인벤토리로 이동">
-        <div class="k-top">
-          <span class="k-title">등록 AI 시스템</span>
-          <span class="k-ico" style="background:var(--blue-soft);color:var(--blue)" data-icon="inventory"></span>
-        </div>
-        <div class="k-val">7<small>개</small></div>
-        <div class="k-foot">제품 탑재 5 · 임직원 도구 2 <b class="up">· 인벤토리 100% 등록</b></div>
-      </a>
-      <a class="kpi kpi--alert" href="#actionRequired" aria-label="미조치 리스크 5건 — 조치 필요 영역으로 이동">
-        <div class="k-top">
-          <span class="k-title">미조치 리스크</span>
-          <span class="k-ico" style="background:var(--high-bg);color:var(--high)" data-icon="risk"></span>
-        </div>
-        <div class="k-val">5<small>건</small></div>
-        <div class="k-foot"><b class="down">긴급 2건</b> · 이번 주 신규 1건</div>
-      </a>
-      <a class="kpi" href="#actionRequired" aria-label="AI Gate 심사 대기 3건 — 조치 필요 영역으로 이동">
-        <div class="k-top">
-          <span class="k-title">AI Gate 심사 대기</span>
-          <span class="k-ico" style="background:var(--mid-bg);color:var(--mid)" data-icon="gate"></span>
-        </div>
-        <div class="k-val">3<small>건</small></div>
-        <div class="k-foot">평균 처리 기간 <b>6.2일</b> · SLA 10일 이내</div>
-      </a>
-      <a class="kpi" href="#aiInventory" aria-label="AI 리터러시 교육 이수율 78% — AI 인벤토리로 이동">
-        <div class="k-top">
-          <span class="k-title">AI 리터러시 교육 이수율</span>
-          <span class="k-ico" style="background:var(--low-bg);color:var(--low)" data-icon="education"></span>
-        </div>
-        <div class="k-val">78<small>%</small></div>
-        <div class="k-foot">한국 AI 기본법 의무 교육 · <b class="warn-t">미이수 142명</b></div>
-      </a>
-      <a class="kpi kpi--finops" href="#aiInventory" aria-label="이번 달 AI API 비용 1,840만원 — AI 인벤토리로 이동">
-        <div class="k-top">
-          <span class="k-title">AI API 비용</span>
-          <span class="k-ico" style="background:var(--purple-bg);color:var(--purple)" data-icon="monitoring"></span>
-        </div>
-        <div class="k-val">1,840<small>만원</small></div>
-        <div class="k-foot">월 예산 74% 사용 · <b class="warn-t">토큰 급증 2건</b></div>
-      </a>
-    </section>
+    <!-- KPI — 역할에 따라 JS가 동적 렌더링 -->
+    <section class="kpis" id="kpiRow" aria-label="핵심 지표"></section>
 
     <!-- 조치 필요 + 라이프사이클 + 규제 업데이트 -->
     <section class="grid g-2-1 control-grid" id="actionRequired">
       <div class="card action-card">
         <div class="card-head">
           <h2><span data-icon="bell" data-size="16"></span>조치 필요</h2>
-          <span class="hint">AX 팀장 오늘의 우선순위</span>
+          <span class="hint" id="actionHint">CAIO 오늘의 우선순위 · 감지→배정→개선→재검토→종료</span>
         </div>
-        <div class="action-list">
-          <div class="action-item critical" data-scope="external">
-            <div class="action-rank">1</div>
-            <div class="action-body">
-              <div class="action-title">사방넷 AI 추천 알고리즘 — 편향성 지표 기준치 초과</div>
-              <div class="action-desc">특정 판매자 상품 노출 비중 42%로 내부 기준 30% 초과. 상품 추천 공정성 재점검 필요.</div>
-              <div class="action-meta"><span class="dday red">D-2</span><span>담당: 서비스개발본부</span><span>규제: 공정성·설명가능성</span></div>
-            </div>
-            <button class="btn-primary btn-sm" data-action="request-action">조치 요청</button>
-          </div>
-          <div class="action-item critical" data-scope="external">
-            <div class="action-rank">2</div>
-            <div class="action-body">
-              <div class="action-title">다우오피스 메일 요약 — 개인정보 컴플라이언스 68%</div>
-              <div class="action-desc">권한 기반 문서 검색은 정상이나, 요약 결과 내 개인정보 마스킹 샘플 점검에서 3건 미흡.</div>
-              <div class="action-meta"><span class="dday red">긴급</span><span>담당: 보안팀 · 서비스개발본부</span><span>규제: 개인정보보호법</span></div>
-            </div>
-            <button class="btn-primary btn-sm" data-action="request-action">조치 요청</button>
-          </div>
-          <div class="action-item warn" data-scope="internal">
-            <div class="action-rank">3</div>
-            <div class="action-body">
-              <div class="action-title">Gemini 업무 활용 — 사내 금지 데이터 입력 가이드 미확정</div>
-              <div class="action-desc">전사 확대 전 DLP 정책과 임직원 사용 가이드 승인 필요.</div>
-              <div class="action-meta"><span class="dday amber">D-7</span><span>담당: 경영지원본부</span><span>규제: 데이터 보안</span></div>
-            </div>
-            <button class="btn-ghost btn-sm" data-action="request-action">조치 요청</button>
-          </div>
-        </div>
+        <div class="action-list" id="actionList"></div>
         <div class="life-flow compact" aria-label="AI 라이프사이클 현황">
           <div class="life-step"><span class="life-count">3</span><b>기획 심사</b><em>Gate 접수</em></div>
           <div class="life-step"><span class="life-count">2</span><b>개발/테스트</b><em>보안·법무</em></div>
@@ -139,9 +87,9 @@
         </div>
         <ol class="reg-timeline">
           <li>
-            <span class="reg-date">2026.12.02</span>
-            <b>EU AI Act 워터마킹 의무 적용</b>
-            <em>뿌리오 AI 생성 문자 표시 기준 반영 필요</em>
+            <span class="reg-date">2026.08.02</span>
+            <b>EU AI Act Article 50 투명성·AI 생성 콘텐츠 표시 의무 적용</b>
+            <em>뿌리오 AI처럼 생성 문자를 다루는 서비스는 AI 생성물 표시 기준과 검증 로그를 사전에 준비해야 합니다.</em>
           </li>
           <li>
             <span class="reg-date">2026.06</span>
@@ -154,6 +102,32 @@
             <em>다우오피스 메일 요약 권한·마스킹 점검</em>
           </li>
         </ol>
+        <div class="edu-note">
+          EU 기준을 기준선으로 삼아 한국 AI 기본법·개인정보보호법·글로벌 고객 요구사항을 하나의 체크리스트로 매핑해, 규제 대응의 중복 작업을 줄입니다.
+        </div>
+      </div>
+    </section>
+
+    <!-- Risk Stratification (보건통계 기반 위험군 분류) -->
+    <section class="card strat-card" id="riskStratification" aria-label="리스크 평가 방식">
+      <div class="card-head">
+        <h2><span data-icon="risk" data-size="16"></span>Risk Stratification — 위험요인 기반 리스크 산정</h2>
+        <button class="btn-link-model" data-action="open-risk-model">위험요인·가중치·임계값 보기</button>
+      </div>
+      <div class="strat-flow">
+        <div class="strat-step"><span class="s-num">1</span><b>위험요인 정의</b><span>데이터 민감도·자동 의사결정·외부 노출·생성형 특성·보안·규제</span></div>
+        <span class="strat-arrow">→</span>
+        <div class="strat-step"><span class="s-num">2</span><b>가중치 부여</b><span>요인별 최대 점수 합산 100점 (민감도 25 · 의사결정 20 …)</span></div>
+        <span class="strat-arrow">→</span>
+        <div class="strat-step"><span class="s-num">3</span><b>임계값 분류</b><span>85+ Critical · 70+ High · 50+ Moderate · 20+ Low</span></div>
+        <span class="strat-arrow">→</span>
+        <div class="strat-step"><span class="s-num">4</span><b>강제 고위험 트리거</b><span>채용·민감정보·자동 추천 등 해당 시 High 이상 상향</span></div>
+        <span class="strat-arrow">→</span>
+        <div class="strat-step"><span class="s-num">5</span><b>추적 모니터링</b><span>고위험군 SLA·재검토·증빙 추적</span></div>
+      </div>
+      <div class="strat-note">
+        리스크 평가는 ‘위험하다/안전하다’의 감각 판단이 아니라, <b>위험요인을 정의하고 가중치를 부여해 고위험군을 분류</b>하는 작업입니다.
+        보건통계의 Risk Stratification 방식을 AI 거버넌스에 적용해, 왜 고위험인지 점수로 설명합니다.
       </div>
     </section>
 
@@ -162,7 +136,10 @@
       <div class="card">
         <div class="card-head">
           <h2><span data-icon="inventory" data-size="16"></span>AI 서비스 통제 현황</h2>
-          <span class="hint">표시 중 <b id="visibleSystemCount">7</b>건</span>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <span class="hint">표시 중 <b id="visibleSystemCount">7</b>건</span>
+            <button class="btn-link-model" data-action="open-risk-model">위험도 산정 기준 보기</button>
+          </div>
         </div>
         <div class="table-wrap">
         <table class="governance-table" role="table">
@@ -170,7 +147,7 @@
             <tr><th>AI 시스템</th><th>범위</th><th>위험도</th><th>컴플라이언스</th><th>규제 매핑</th><th>상태</th><th>Action</th></tr>
           </thead>
           <tbody id="modelCardRows">
-            <tr class="clickable" data-card="hr" data-scope="external">
+            <tr class="clickable" data-card="hr" data-scope="external" data-org="hq">
               <td><span class="ai-name">다우오피스 HR AI</span><span class="td-sub">운영 중 · 인사/채용 데이터</span></td>
               <td><span class="chip prod">고객 제공</span></td>
               <td><span class="risk-score high" data-tip="편향성 42점 · 개인정보 28점 · 설명가능성 20점">90</span><span class="risk high">고위험</span></td>
@@ -179,7 +156,7 @@
               <td><span class="status act"><span class="s-dot"></span>조치 필요</span></td>
               <td><div class="row-actions"><button class="btn-primary btn-sm" data-action="request-action">조치 요청</button><button class="btn-detail" data-open-card="hr">상세</button></div></td>
             </tr>
-            <tr class="clickable" data-card="ppurio" data-scope="external">
+            <tr class="clickable" data-card="ppurio" data-scope="external" data-org="messaging">
               <td><span class="ai-name">뿌리오 AI</span><span class="td-sub">개발/테스트 · 생성 문자</span></td>
               <td><span class="chip prod">고객 제공</span></td>
               <td><span class="risk-score mid" data-tip="저작권 24점 · 투명성 31점 · 환각 16점">71</span><span class="risk mid">주의</span></td>
@@ -188,7 +165,7 @@
               <td><span class="status act"><span class="s-dot"></span>조치 필요</span></td>
               <td><div class="row-actions"><button class="btn-primary btn-sm" data-action="request-action">조치 요청</button><button class="btn-detail" data-open-card="ppurio">상세</button></div></td>
             </tr>
-            <tr class="clickable" data-card="aligpt" data-scope="external">
+            <tr class="clickable" data-card="aligpt" data-scope="external" data-org="group">
               <td><span class="ai-name">알리GPT</span><span class="td-sub">운영 중 · 고객 문의/FAQ</span></td>
               <td><span class="chip prod">고객 제공</span></td>
               <td><span class="risk-score mid" data-tip="환각 30점 · 고객정보 18점 · 신뢰성 12점">60</span><span class="risk mid">주의</span></td>
@@ -197,7 +174,7 @@
               <td><span class="status ok"><span class="s-dot"></span>정상</span></td>
               <td><div class="row-actions"><button class="btn-ghost btn-sm" data-action="request-action">조치 요청</button><button class="btn-detail" data-open-card="aligpt">상세</button></div></td>
             </tr>
-            <tr class="clickable" data-card="gemini" data-scope="internal">
+            <tr class="clickable" data-card="gemini" data-scope="internal" data-org="internal">
               <td><span class="ai-name">Gemini for Workspace</span><span class="td-sub">기획 심사 중 · 업무 문서</span></td>
               <td><span class="chip emp">사내 도구</span></td>
               <td><span class="risk-score mid" data-tip="데이터 보안 34점 · 개인정보 20점 · 통제권 14점">68</span><span class="risk mid">주의</span></td>
@@ -206,7 +183,7 @@
               <td><span class="status rev"><span class="s-dot"></span>정책 검토</span></td>
               <td><div class="row-actions"><button class="btn-ghost btn-sm" data-action="request-action">조치 요청</button><button class="btn-detail" data-open-card="gemini">상세</button></div></td>
             </tr>
-            <tr class="clickable" data-card="daouoffice" data-scope="external">
+            <tr class="clickable" data-card="daouoffice" data-scope="external" data-org="hq">
               <td><span class="ai-name">다우오피스 메일 요약</span><span class="td-sub">운영 중 · 메일/게시판/문서</span></td>
               <td><span class="chip prod">고객 제공</span></td>
               <td><span class="risk-score high" data-tip="개인정보 38점 · 데이터 보안 29점 · 환각 10점">77</span><span class="risk high">고위험</span></td>
@@ -215,7 +192,7 @@
               <td><span class="status act"><span class="s-dot"></span>조치 필요</span></td>
               <td><div class="row-actions"><button class="btn-primary btn-sm" data-action="request-action">조치 요청</button><button class="btn-detail" data-open-card="daouoffice">상세</button></div></td>
             </tr>
-            <tr class="clickable" data-card="sabangnet" data-scope="external">
+            <tr class="clickable" data-card="sabangnet" data-scope="external" data-org="commerce">
               <td><span class="ai-name">사방넷 AI 추천</span><span class="td-sub">개발/테스트 · 상품 추천</span></td>
               <td><span class="chip prod">고객 제공</span></td>
               <td><span class="risk-score high" data-tip="편향성 40점 · 상품노출 27점 · 설명가능성 13점">80</span><span class="risk high">고위험</span></td>
@@ -224,7 +201,7 @@
               <td><span class="status act"><span class="s-dot"></span>D-2</span></td>
               <td><div class="row-actions"><button class="btn-primary btn-sm" data-action="request-action">조치 요청</button><button class="btn-detail" data-open-card="sabangnet">상세</button></div></td>
             </tr>
-            <tr class="clickable" data-card="claude" data-scope="internal">
+            <tr class="clickable" data-card="claude" data-scope="internal" data-org="internal">
               <td><span class="ai-name">Claude Code</span><span class="td-sub">운영 중 · 소스코드</span></td>
               <td><span class="chip emp">사내 도구</span></td>
               <td><span class="risk-score low" data-tip="소스코드 18점 · 보안 14점 · 책임성 8점">40</span><span class="risk low">정상</span></td>
@@ -258,6 +235,42 @@
       </div>
     </section>
 
+    <!-- 리스크 Heatmap + Evidence Pack -->
+    <section class="grid g-2-1">
+      <div class="card heatmap-card" id="riskHeatmap">
+        <div class="card-head">
+          <h2><span data-icon="pie" data-size="16"></span>리스크 Heatmap — 영향도 × 발생가능성</h2>
+          <span class="hint">점 클릭 시 상세</span>
+        </div>
+        <div class="heatmap-lead">단일 점수만 보면 조치 우선순위가 왜곡될 수 있어, 영향도와 발생가능성을 함께 봅니다.</div>
+        <div class="heatmap-wrap">
+          <div class="hm-yaxis">영향도 (Low → Very High)</div>
+          <div class="hm-main">
+            <div class="hm-grid" id="hmGrid"></div>
+            <div class="hm-xtitle">발생가능성 (Low → Very High)</div>
+          </div>
+        </div>
+        <div class="hm-legend">
+          <span><i style="background:var(--high-bg)"></i>Critical 영역</span>
+          <span><i style="background:var(--mid-bg)"></i>High</span>
+          <span><i style="background:#fbf6e6"></i>Moderate</span>
+          <span><i style="background:var(--low-bg)"></i>Low</span>
+        </div>
+      </div>
+
+      <div class="card" id="evidencePack">
+        <div class="card-head">
+          <h2><span data-icon="scale" data-size="16"></span>AI Evidence Pack</h2>
+          <span class="hint">감사 가능한 증빙</span>
+        </div>
+        <div class="evi-head-kpi">
+          <div class="ek-big" id="eviReadiness">64%</div>
+          <div class="ek-txt"><b>증빙 준비율</b><br>AI Gate를 통과한 모든 AI는 승인 근거와 조치 이력을 하나의 증빙 패키지로 남깁니다.</div>
+        </div>
+        <div class="evi-grid" id="eviGrid"></div>
+      </div>
+    </section>
+
     <div class="proto-note">
       본 화면은 다우기술 AI 거버넌스 관리 플랫폼의 <b>단일 메인 대시보드 프로토타입</b>입니다. 데이터는 공개 자료 기반의 예시 값입니다.<br>
       PT자료_AX운영기획_김미주 · 2026.06
@@ -279,10 +292,53 @@
   </div>
 </div>
 
+<!-- 리스크 산정 기준 모달 (위험요인·가중치·임계값·강제 트리거) -->
+<div class="modal-bg" id="riskModelBg" role="dialog" aria-modal="true" aria-labelledby="riskModelTitle">
+  <div class="modal modal--wide">
+    <div class="modal-title-row">
+      <div>
+        <h3 id="riskModelTitle">위험도 산정 기준 — Risk Stratification</h3>
+        <p class="m-sub">보건통계의 위험군 분류 방식처럼, 위험요인·가중치·임계값을 기준으로 AI 리스크를 분류합니다.</p>
+      </div>
+      <button class="panel-close" data-close-modal="riskModelBg" aria-label="닫기">✕</button>
+    </div>
+    <div class="risk-model-body" id="riskModelBody"></div>
+  </div>
+</div>
+
+<!-- Evidence Pack 상세 모달 -->
+<div class="modal-bg" id="eviModalBg" role="dialog" aria-modal="true" aria-labelledby="eviModalTitle">
+  <div class="modal modal--wide">
+    <div class="modal-title-row">
+      <div>
+        <h3 id="eviModalTitle">AI Evidence Pack</h3>
+        <p class="m-sub" id="eviModalSub">감사 가능한 증빙 패키지 — 승인 근거와 조치 이력</p>
+      </div>
+      <button class="panel-close" data-close-modal="eviModalBg" aria-label="닫기">✕</button>
+    </div>
+    <div id="eviModalBody"></div>
+  </div>
+</div>
+
+<!-- 조치 워크플로우 모달 (감지→배정→개선→재검토→종료) -->
+<div class="modal-bg" id="wfModalBg" role="dialog" aria-modal="true" aria-labelledby="wfModalTitle">
+  <div class="modal">
+    <div class="modal-title-row">
+      <div>
+        <h3 id="wfModalTitle">조치 워크플로우</h3>
+        <p class="m-sub" id="wfModalSub">감지 → 담당 배정 → 개선 조치 → 재검토 → 종료</p>
+      </div>
+      <button class="panel-close" data-close-modal="wfModalBg" aria-label="닫기">✕</button>
+    </div>
+    <div id="wfModalBody"></div>
+  </div>
+</div>
+
 <script src="../scripts/icons.js"></script>
 <script src="../scripts/nav.js"></script>
 <script src="../scripts/components.js"></script>
 <script src="../scripts/charts.js"></script>
+<script src="../scripts/pages/dashboard-data.js"></script>
 <script src="../scripts/pages/dashboard.js"></script>
 </body>
 </html>

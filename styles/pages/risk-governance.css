@@ -1,0 +1,274 @@
+/* ════════════════════════════════════════════
+   risk-governance.css — 리스크 기반 거버넌스 고도화
+   역할 스위처 · 조직 필터 · 리스크 산정 · Heatmap ·
+   Evidence Pack · 조치 워크플로우 전용 스타일
+   ════════════════════════════════════════════ */
+
+/* ── 역할 스위처 + 조직 필터 바 ───────────────── */
+.role-bar{
+  background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+  padding:14px 18px; margin-bottom:14px;
+}
+.role-bar-top{display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;}
+.role-bar-label{display:flex; align-items:center; gap:8px; flex-shrink:0;}
+.role-bar-label b{font-size:13.5px;}
+.role-bar-label .role-badge{
+  font-size:10.5px; font-weight:800; color:var(--blue); background:var(--blue-soft);
+  padding:3px 9px; border-radius:99px;
+}
+.role-seg{display:inline-flex; flex-wrap:wrap; gap:4px; padding:4px; background:var(--bar-bg); border-radius:10px;}
+.role-seg button{
+  border:none; background:transparent; color:var(--sub);
+  font-size:12.5px; font-weight:700; padding:8px 13px; border-radius:8px; cursor:pointer; white-space:nowrap;
+}
+.role-seg button.on{background:var(--card); color:var(--blue); box-shadow:0 1px 5px rgba(19,41,75,.12);}
+.role-desc{
+  margin-top:11px; font-size:12px; color:var(--info-txt); line-height:1.6;
+  background:var(--blue-soft); border-radius:9px; padding:9px 13px;
+}
+.role-desc b{font-weight:800;}
+
+/* 조직 필터 — 역할 바 하단 */
+.org-row{display:flex; align-items:center; gap:10px; margin-top:11px; flex-wrap:wrap;}
+.org-row .f-label{font-size:11.5px; color:var(--sub); font-weight:800; flex-shrink:0;}
+.org-seg{display:inline-flex; flex-wrap:wrap; gap:4px; padding:3px; background:var(--bar-bg); border-radius:9px;}
+.org-seg button{
+  border:none; background:transparent; color:var(--sub); font-size:11.8px; font-weight:700;
+  padding:6px 11px; border-radius:7px; cursor:pointer; white-space:nowrap;
+}
+.org-seg button.on{background:var(--card); color:var(--blue); box-shadow:0 1px 4px rgba(19,41,75,.1);}
+
+/* 조직 강조(emphasis) — 미해당 항목은 흐리게, 해당 항목은 강조 */
+.org-dim{opacity:.42; filter:saturate(.6);}
+tr.org-focus{background:var(--blue-soft) !important;}
+.action-item.org-focus{box-shadow:0 0 0 2px var(--blue) inset;}
+
+/* KPI 열 수를 역할별 개수(4~5)에 맞춰 동적 조정 — JS가 --kpi-cols 설정 */
+.kpis{grid-template-columns:repeat(var(--kpi-cols,5),1fr);}
+@media (max-width:1100px){ .kpis{grid-template-columns:repeat(2,1fr);} }
+@media (max-width:760px){ .kpis{grid-template-columns:1fr;} }
+
+/* KPI 톤별 좌측 보더 (역할 전환 시 JS가 부여) */
+.kpi.tone-high{border-left:4px solid var(--high);}
+.kpi.tone-mid{border-left:4px solid var(--mid);}
+.kpi.tone-low{border-left:4px solid var(--low);}
+.kpi.tone-purple{border-left:4px solid var(--purple);}
+.kpi.tone-blue{border-left:4px solid var(--blue);}
+
+/* ── Risk Stratification 플로우 섹션 ──────────── */
+.strat-card{border-left:4px solid var(--brand);}
+.strat-flow{display:flex; align-items:stretch; gap:0; flex-wrap:wrap;}
+.strat-step{
+  flex:1; min-width:120px; position:relative; padding:14px 14px 14px 16px;
+  border:1px solid var(--line); border-radius:11px; background:var(--input-bg);
+}
+.strat-step + .strat-step{margin-left:10px;}
+.strat-step .s-num{
+  display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px;
+  border-radius:7px; background:var(--blue-soft); color:var(--blue); font-weight:800; font-size:12px; margin-bottom:8px;
+}
+.strat-step b{display:block; font-size:13px; margin-bottom:3px;}
+.strat-step span{display:block; font-size:11.5px; color:var(--sub); line-height:1.5;}
+.strat-arrow{align-self:center; color:var(--sub); font-weight:800; padding:0 2px; flex:0 0 auto;}
+.strat-note{
+  margin-top:14px; font-size:12px; color:var(--txt); line-height:1.7;
+  background:var(--row-hover); border:1px dashed var(--line); border-radius:9px; padding:12px 14px;
+}
+.strat-note b{color:var(--brand-deep); font-weight:800;}
+@media (max-width:900px){
+  .strat-step{min-width:calc(50% - 20px);}
+  .strat-arrow{display:none;}
+  .strat-step + .strat-step{margin-left:0;}
+  .strat-flow{gap:10px;}
+}
+
+/* ── 리스크 산정 모달 (위험요인·가중치·임계값) ── */
+.risk-model-body .rm-lead{font-size:12.5px; color:var(--txt); line-height:1.7; margin-bottom:16px;}
+.rm-section{margin-bottom:20px;}
+.rm-section h4{font-size:12px; color:var(--sub); font-weight:800; letter-spacing:.03em; margin-bottom:10px;}
+.rm-factor{display:flex; align-items:center; gap:12px; padding:8px 0; border-bottom:1px solid var(--row-line);}
+.rm-factor:last-child{border-bottom:none;}
+.rm-factor .rf-info{flex:1; min-width:0;}
+.rm-factor .rf-name{font-size:13px; font-weight:700;}
+.rm-factor .rf-desc{font-size:11.5px; color:var(--sub); line-height:1.5; margin-top:2px;}
+.rm-factor .rf-weight{
+  flex-shrink:0; font-size:12px; font-weight:900; color:var(--blue);
+  background:var(--blue-soft); border-radius:8px; padding:6px 10px; min-width:48px; text-align:center;
+}
+.rm-total{display:flex; justify-content:space-between; font-size:12.5px; font-weight:800; margin-top:10px; padding-top:10px; border-top:2px solid var(--line);}
+
+.rm-thresholds{width:100%; border-collapse:collapse; margin-top:2px;}
+.rm-thresholds th,.rm-thresholds td{padding:8px 10px; font-size:12px; border-bottom:1px solid var(--row-line); text-align:left;}
+.rm-thresholds th{color:var(--sub); font-weight:700;}
+.lvl-pill{display:inline-block; font-size:11px; font-weight:800; padding:3px 9px; border-radius:99px; white-space:nowrap;}
+.lvl-pill.crit{background:var(--high-bg); color:var(--high);}
+.lvl-pill.high{background:var(--mid-bg); color:var(--mid);}
+.lvl-pill.mod{background:var(--blue-soft); color:var(--blue);}
+.lvl-pill.low{background:var(--low-bg); color:var(--low);}
+
+.rm-triggers{list-style:none; display:flex; flex-direction:column; gap:7px;}
+.rm-triggers li{
+  position:relative; padding:9px 12px 9px 32px; font-size:12px; line-height:1.5;
+  background:var(--high-bg); border-radius:9px; color:var(--txt);
+}
+.rm-triggers li::before{
+  content:"!"; position:absolute; left:11px; top:50%; transform:translateY(-50%);
+  width:15px; height:15px; border-radius:50%; background:var(--high); color:#fff;
+  font-size:10px; font-weight:900; display:flex; align-items:center; justify-content:center;
+}
+.rm-strat-note{
+  font-size:12px; color:var(--txt); line-height:1.7; background:var(--blue-soft);
+  border-radius:9px; padding:12px 14px;
+}
+.rm-strat-note b{font-weight:800; color:var(--brand-deep);}
+
+/* ── 상세 모달: 점수 분해 바 ──────────────────── */
+.rd-score-head{display:flex; align-items:center; gap:12px; margin-bottom:14px;}
+.rd-score-big{
+  font-size:30px; font-weight:900; line-height:1; padding:10px 14px; border-radius:12px;
+}
+.rd-score-big.crit{background:var(--high-bg); color:var(--high);}
+.rd-score-big.high{background:var(--mid-bg); color:var(--mid);}
+.rd-score-big.mod{background:var(--blue-soft); color:var(--blue);}
+.rd-score-big.low{background:var(--low-bg); color:var(--low);}
+.rd-score-head .rd-lvl{font-size:13px; font-weight:800;}
+.rd-score-head .rd-lvl small{display:block; font-size:11px; color:var(--sub); font-weight:600; margin-top:2px;}
+
+.risk-bars{display:flex; flex-direction:column; gap:9px;}
+.rb-row{display:grid; grid-template-columns:118px 1fr 44px; align-items:center; gap:10px;}
+.rb-label{font-size:12px; color:var(--txt); font-weight:600;}
+.rb-track{height:9px; background:var(--bar-bg); border-radius:99px; overflow:hidden;}
+.rb-fill{height:100%; border-radius:99px; background:var(--brand); transition:width .6s ease;}
+.rb-fill.f-high{background:var(--high);}
+.rb-fill.f-mid{background:var(--mid);}
+.rb-fill.f-low{background:var(--low);}
+.rb-val{font-size:11.5px; font-weight:800; color:var(--sub); text-align:right;}
+
+.rd-triggers{display:flex; flex-wrap:wrap; gap:6px;}
+.rd-trigger{
+  font-size:11px; font-weight:700; padding:5px 10px; border-radius:99px;
+  background:var(--high-bg); color:var(--high);
+}
+.rd-factor{padding:9px 0; border-bottom:1px solid var(--row-line); font-size:12.5px; line-height:1.6;}
+.rd-factor:last-child{border-bottom:none;}
+.rd-factor b{font-weight:800;}
+.rd-factor .rf-th{color:var(--high); font-weight:800;}
+.rd-owners{display:flex; flex-wrap:wrap; gap:8px;}
+.rd-owner{font-size:11.5px; background:var(--stage1-bg); color:var(--stage1-txt); padding:5px 11px; border-radius:99px; font-weight:700;}
+.rd-owner b{color:var(--txt);}
+.rd-section{margin-top:18px;}
+.rd-section > h4{font-size:12px; color:var(--sub); font-weight:800; letter-spacing:.03em; margin-bottom:10px;}
+.rd-actions-btns{display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;}
+
+/* ── 조치 워크플로우 스테퍼 ───────────────────── */
+.wf-steps{display:flex; align-items:flex-start; gap:0; margin:4px 0 2px;}
+.wf-step{flex:1; text-align:center; position:relative;}
+.wf-step .wf-dot{
+  width:26px; height:26px; border-radius:50%; margin:0 auto 7px; display:flex;
+  align-items:center; justify-content:center; font-size:12px; font-weight:800;
+  background:var(--step-bg); color:var(--sub); position:relative; z-index:2;
+}
+.wf-step .wf-name{font-size:11px; color:var(--sub); font-weight:600; line-height:1.3;}
+.wf-step::before{
+  content:""; position:absolute; top:13px; left:-50%; width:100%; height:2px; background:var(--step-bg); z-index:1;
+}
+.wf-step:first-child::before{display:none;}
+.wf-step.done .wf-dot{background:var(--low); color:#fff;}
+.wf-step.done::before{background:var(--low);}
+.wf-step.current .wf-dot{background:var(--blue); color:#fff; box-shadow:0 0 0 4px var(--blue-soft);}
+.wf-step.current::before{background:var(--low);}
+.wf-step.current .wf-name{color:var(--blue); font-weight:800;}
+.wf-meta{
+  margin-top:14px; display:grid; grid-template-columns:1fr 1fr; gap:8px;
+}
+.wf-meta .wm-cell{background:var(--row-hover); border-radius:9px; padding:9px 12px;}
+.wf-meta .wm-k{font-size:11px; color:var(--sub); font-weight:700; display:block; margin-bottom:3px;}
+.wf-meta .wm-v{font-size:12.5px; font-weight:700; line-height:1.4;}
+.wf-meta .wm-v.red{color:var(--high);}
+@media (max-width:600px){ .wf-meta{grid-template-columns:1fr;} }
+
+/* ── 리스크 Heatmap ───────────────────────────── */
+.heatmap-card{}
+.heatmap-lead{font-size:12px; color:var(--sub); line-height:1.6; margin-bottom:14px;}
+.heatmap-wrap{display:flex; gap:10px; align-items:stretch;}
+.hm-yaxis{
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  writing-mode:vertical-rl; transform:rotate(180deg);
+  font-size:11px; font-weight:800; color:var(--sub); letter-spacing:.04em;
+}
+.hm-main{flex:1; min-width:0;}
+.hm-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:6px;}
+.hm-cell{
+  position:relative; aspect-ratio:1.6/1; border-radius:9px; min-height:54px;
+  display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:4px; padding:4px;
+}
+.hm-cell.z-low{background:var(--low-bg);}
+.hm-cell.z-mod{background:#fbf6e6;}
+.hm-cell.z-high{background:var(--mid-bg);}
+.hm-cell.z-crit{background:var(--high-bg);}
+.hm-dot{
+  display:inline-flex; align-items:center; justify-content:center; cursor:pointer;
+  min-width:24px; height:24px; padding:0 7px; border-radius:99px; font-size:10.5px; font-weight:800;
+  color:#fff; box-shadow:0 2px 6px rgba(15,23,42,.18); transition:.12s; white-space:nowrap;
+}
+.hm-dot:hover{transform:scale(1.08);}
+.hm-dot.d-crit{background:var(--high);}
+.hm-dot.d-high{background:var(--mid);}
+.hm-dot.d-mod{background:var(--blue);}
+.hm-dot.d-low{background:var(--low);}
+.hm-xaxis{
+  display:grid; grid-template-columns:repeat(5,1fr); gap:6px; margin-top:6px;
+  font-size:10px; color:var(--sub); font-weight:700; text-align:center;
+}
+.hm-xtitle{text-align:center; font-size:11px; font-weight:800; color:var(--sub); letter-spacing:.04em; margin-top:7px;}
+.hm-legend{display:flex; gap:14px; flex-wrap:wrap; margin-top:14px; font-size:11px; color:var(--sub);}
+.hm-legend span{display:inline-flex; align-items:center; gap:6px;}
+.hm-legend i{width:11px; height:11px; border-radius:4px; display:inline-block;}
+
+/* ── AI Evidence Pack ─────────────────────────── */
+.evi-head-kpi{
+  display:flex; align-items:center; gap:14px; background:var(--blue-soft);
+  border-radius:11px; padding:13px 16px; margin-bottom:16px; flex-wrap:wrap;
+}
+.evi-head-kpi .ek-big{font-size:26px; font-weight:900; color:var(--brand-deep); line-height:1;}
+.evi-head-kpi .ek-txt{font-size:12px; color:var(--info-txt); line-height:1.5;}
+.evi-head-kpi .ek-txt b{font-weight:800;}
+.evi-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px;}
+.evi-cardlet{
+  border:1px solid var(--line); border-radius:11px; padding:14px 15px; cursor:pointer; transition:.12s;
+}
+.evi-cardlet:hover{box-shadow:0 4px 14px rgba(19,41,75,.08); border-color:var(--blue);}
+.evi-cardlet .ec-top{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:9px;}
+.evi-cardlet .ec-name{font-size:13px; font-weight:800;}
+.evi-cardlet .ec-pct{font-size:13px; font-weight:900;}
+.evi-cardlet .ec-pct.c-low{color:var(--high);} /* 준비율 낮음 = 경고색 */
+.evi-cardlet .ec-pct.c-mid{color:var(--mid);}
+.evi-cardlet .ec-pct.c-ok{color:var(--low);}
+.evi-cardlet .ec-bar{height:7px; background:var(--bar-bg); border-radius:99px; overflow:hidden; margin-bottom:9px;}
+.evi-cardlet .ec-bar i{display:block; height:100%; border-radius:99px;}
+.evi-cardlet .ec-bar i.c-low{background:var(--high);}
+.evi-cardlet .ec-bar i.c-mid{background:var(--mid);}
+.evi-cardlet .ec-bar i.c-ok{background:var(--low);}
+.evi-cardlet .ec-foot{font-size:11px; color:var(--sub); line-height:1.5;}
+.evi-cardlet .ec-foot b{color:var(--txt); font-weight:700;}
+@media (max-width:900px){ .evi-grid{grid-template-columns:1fr 1fr;} }
+@media (max-width:600px){ .evi-grid{grid-template-columns:1fr;} }
+
+/* Evidence 모달 내 항목 테이블 */
+.evi-table{width:100%; border-collapse:collapse;}
+.evi-table td{padding:10px 8px; border-bottom:1px solid var(--row-line); font-size:12.5px; vertical-align:top;}
+.evi-table tr:last-child td{border-bottom:none;}
+.evi-table .et-name{font-weight:700; width:34%;}
+.evi-table .et-desc{color:var(--sub); font-size:11.5px;}
+.evi-status{display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:800; padding:4px 10px; border-radius:99px; white-space:nowrap;}
+.evi-status::before{content:""; width:6px; height:6px; border-radius:50%; background:currentColor;}
+.evi-status.s-done{background:var(--low-bg); color:var(--low);}
+.evi-status.s-progress,.evi-status.s-review,.evi-status.s-collect{background:var(--mid-bg); color:var(--mid);}
+.evi-status.s-wait{background:var(--stage1-bg); color:var(--stage1-txt);}
+
+/* 인벤토리 카드 헤더의 산정 기준 버튼 */
+.btn-link-model{
+  border:1px solid var(--input-border); background:var(--card); color:var(--blue);
+  font-size:11.5px; font-weight:800; padding:6px 12px; border-radius:8px; cursor:pointer; transition:.12s;
+}
+.btn-link-model:hover{background:var(--blue-soft); border-color:var(--blue);}

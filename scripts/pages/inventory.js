@@ -36,7 +36,7 @@
       status: '운영 중', statusClass: 'ok', owner: '비즈마케팅부문',
       registered: '2025.12.18', reviewed: '2026.06.05',
       data: ['마케팅 문구', '발송 데이터'],
-      reg: ['EU AI Act 제50조 — AI 생성 콘텐츠 워터마킹 (기한 2026.12.02)', '한국 AI 기본법 — AI 생성물 표시 이원화 (사람 인식 + 기계 판독)'],
+      reg: ['EU AI Act 제50조 — AI 생성 콘텐츠 워터마킹 (기한 2026.08.02)', '한국 AI 기본법 — AI 생성물 표시 이원화 (사람 인식 + 기계 판독)'],
       contact: '최민호 팀장 · 비즈마케팅부문 (mhchoi@daou.co.kr)',
       history: [
         { date: '2026.06.05', text: '워터마킹 미적용 리스크 등록 (RSK-005)' },
